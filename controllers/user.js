@@ -1,14 +1,20 @@
 // hasher le MP des utilisateurs
 const bcrypt = require('bcrypt');
+// recuperer model user
 const User = require('../models/user');
+//attribution token à utilisateur
 const jwt = require('jsonwebtoken');
 
 exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
         const user = new User({
-          email: req.body.email,
-          password: hash
+          user_id:req.body.user_id,
+          user_nom:req.body.user_nom,
+          user_prenom:req.body.user_prenom,
+          user_mail: req.body.user_mail,
+          user_login: req.body.user_login,
+          user_mp: hash
         });
         user.save()
           .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
@@ -18,12 +24,12 @@ exports.signup = (req, res, next) => {
   };
 
   exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email })
+    User.findOne({ user_mail: req.body.user_mail })
       .then(user => {
         if (!user) {
           return res.status(401).json({ error: 'Utilisateur non trouvé !' });
         }
-        bcrypt.compare(req.body.password, user.password)
+        bcrypt.compare(req.body.user_mp, user.user_mp)
           .then(valid => {
             if (!valid) {
               return res.status(401).json({ error: 'Mot de passe incorrect !' });
