@@ -14,6 +14,9 @@ const blogRoutes = require('./routes/blog');
 // Importer la route dédiée aux utilisateurs
 const userRoutes = require('./routes/user');
 
+
+//Importer helmet pour securiser express (protection application)
+const helmet = require('helmet');
 // Donner acces au chemin (importer images)
 const path = require('path');
 
@@ -73,8 +76,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 // secure HTTP headers
-//app.use(helmet());
-
+app.use(helmet());
 // cross-scripting protection (helmet)
 app.use((_req, res, next) => {
   res.setHeader("X-XSS-Protection", "1; mode=block");
