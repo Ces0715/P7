@@ -5,8 +5,6 @@ const app = express();
 //module 'dotenv' pour masquer les informations de connexion à la base de données à l'aide de variables d'environnement
 require("dotenv").config();
 
-
-
 //importer mysql pour utiliser la base de données
 const mysql = require('mysql');
 
@@ -21,11 +19,11 @@ const path = require('path');
 
 //connection à mysql
 const db = mysql.createConnection({
-  host: 'localhost',
-  port: '3307',
-  user: 'ces',
-  password: 'Evalia0715',
-  database: 'projet7'
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_DATABASE
 });
 
 db.connect(function (err) {
