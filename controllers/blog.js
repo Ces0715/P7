@@ -1,15 +1,23 @@
-// recuperer le modele sauce
+// recuperer le modele blog
 //const Blog = require('../models/blog');
-
 // recuperer modele file system pour les images
 const fs = require('fs');
 
-//creer une sauce (route POST)
+//constructeur
+const Blog = function(blog1) {
+  this.blog_id = blog1.blog_id;
+  this.blog_titre = blog1.blog_titre;
+  this.blog_text = blog1.blog_text;
+  this.blog_date = blog1.blog_date;
+  this.blog_image = blog1.blog_image;
+};
+
+//creer un blog (route POST)
 exports.createBlog = (req, res, next) => {
   const blogObject = JSON.parse(req.body.blog);
   delete blogObject._id;
   const blog = new Blog({
-    ...sauceObject,
+    ...blogObject,
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   });
   blog.save()
@@ -18,7 +26,7 @@ exports.createBlog = (req, res, next) => {
   next();
 };
 
-// modifier une sauce (put)
+// modifier un blog (put)
 exports.modifyOneBlog = (req, res, _) => {
   const blogObject = req.file ? {
     ...JSON.parse(req.body.blog),
@@ -30,7 +38,7 @@ exports.modifyOneBlog = (req, res, _) => {
     .catch(error => res.status(400).json({ error }));
 };
 
-// supprimer une sauce
+// supprimer un blog
 exports.deleteBlog = (req, res, next) => {
   Blog.findOne({ _id: req.params.id })
     .then(blog => {
@@ -44,7 +52,7 @@ exports.deleteBlog = (req, res, next) => {
     .catch(error => res.status(500).json({ error }));
 };
 
-//accéder à une sauce (route get)
+//accéder à un blog (route get)
 exports.getOneBlog = (req, res, _) => {
   Blog.findOne({ _id: req.params.id })
     .then((blog) => { res.status(200).json(blog); })
@@ -53,7 +61,7 @@ exports.getOneBlog = (req, res, _) => {
     });
 };
 
-//accéder à toutes les sauces (route get)
+//accéder à tous les blog (route get)
 exports.getAllBlog = (_req, res, _) => {
   Blog.find()
     .then((blogs) => { res.status(200).json(blogs); })
