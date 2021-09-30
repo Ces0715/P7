@@ -1,8 +1,9 @@
 // recuperer le modele blog
-//const Blog = require('../models/blog');
+const Blog = require('../models/blog');
 // recuperer modele file system pour les images
 const fs = require('fs');
 
+/*
 //constructeur
 const Blog = function(blog1) {
   this.blog_id = blog1.blog_id;
@@ -11,6 +12,11 @@ const Blog = function(blog1) {
   this.blog_date = blog1.blog_date;
   this.blog_image = blog1.blog_image;
 };
+*/
+
+
+
+
 
 //creer un blog (route POST)
 exports.createBlog = (req, res, next) => {
@@ -125,6 +131,6 @@ exports.likeDislike = (req, res, _) => {
   }
 };
 
-
+//module.exports = Blog;
 
 

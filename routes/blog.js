@@ -14,18 +14,19 @@ module.exports = router;
 
 /*
 module.exports = app => {
-    const blogs = require("../controllers/blog.js");
+    const blog = require("../controllers/blog.js");
     // Create a new Customer
-    app.post("/blogs", blogs.create);
+    app.post("/blogs", blog.create);
     // Retrieve all Customers
-    app.get("/blogs", blogs.findAll);
+    app.get("/blogs", blog.findAll);
     // Retrieve a single Customer with customerId
-    app.get("/blogs/:blogId", blogs.findOne);
+    app.get("/blogs/:blogId", blog.findOne);
     // Update a Customer with customerId
-    app.put("/blogs/:blogId", blogs.update);
+    app.put("/blogs/:blogId", blog.update);
     // Delete a Customer with customerId
-    app.delete("/blogs/:blogId", blogs.delete);
+    app.delete("/blogs/:blogId", blog.delete);
     // Create a new Customer
-    app.delete("/blogs", blogs.deleteAll);
+    app.delete("/blogs", blog.deleteAll);
 };
+
 */

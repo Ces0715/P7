@@ -4,13 +4,14 @@ const sql = require('mysql');
 //constructeur
   const Blog = function(blog1) {
     this.blog_id = blog1.blog_id;
+    this.bloguser_id = blog1.bloguser_id;
     this.blog_titre = blog1.blog_titre;
     this.blog_text = blog1.blog_text;
     this.blog_date = blog1.blog_date;
     this.blog_image = blog1.blog_image;
   };
 
-  Blog.create = (newBlog, result) => {
+  Blog.createBlog = (newBlog, result) => {
     sql.query("INSERT INTO blog SET ?", newBlog, (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -22,6 +23,7 @@ const sql = require('mysql');
     });
   };
 
+  /*
   Blog.findById = (BlogId, result) => {
     sql.query(`SELECT * FROM blog WHERE id = ${BlogId}`, (err, res) => {
       if (err) {
@@ -38,8 +40,9 @@ const sql = require('mysql');
       result({ kind: "not_found" }, null);
     });
   };
+*/
 
-  Blog.getAll = result => {
+  Blog.getAllBlog = result => {
     sql.query("SELECT * FROM blog", (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -51,7 +54,7 @@ const sql = require('mysql');
     });
   };
 
-  Blog.updateById = (id, blog, result) => {
+  Blog.modifyOneBlog = (id, blog, result) => {
     sql.query("UPDATE blogs SET titre = ?, text = ?, date = ?, images = ? WHERE id = ?",
       [blog.blog_titre, blog.blog_text, blog.blog_date, blog.blog_image, id],
       (err, res) => {
@@ -70,7 +73,7 @@ const sql = require('mysql');
       });
   };
 
-  Blog.remove = (id, result) => {
+  Blog.deleteBlog = (id, result) => {
     sql.query("DELETE FROM blogs WHERE id = ?", id, (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -86,7 +89,7 @@ const sql = require('mysql');
       result(null, res);
     });
   };
-  
+  /*
   Blog.removeAll = result => {
     sql.query("DELETE FROM blogs", (err, res) => {
       if (err) {
@@ -98,5 +101,6 @@ const sql = require('mysql');
       result(null, res);
     });
   };
+  */
 
   module.exports = Blog;
