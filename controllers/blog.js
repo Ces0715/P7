@@ -14,10 +14,6 @@ const Blog = function(blog1) {
 };
 */
 
-
-
-
-
 //creer un blog (route POST)
 exports.createBlog = (req, res, next) => {
   const blogObject = JSON.parse(req.body.blog);
@@ -60,7 +56,7 @@ exports.deleteBlog = (req, res, next) => {
 
 //accéder à un blog (route get)
 exports.getOneBlog = (req, res, _) => {
-  Blog.findOne({ _id: req.params.id })
+  Blog.findOne({ blog_id: req.params.id })
     .then((blog) => { res.status(200).json(blog); })
     .catch((error) => {
       res.status(404).json({ error });
@@ -76,6 +72,7 @@ exports.getAllBlog = (_req, res, _) => {
     });
 };
 
+/*
 // creer like dislike (route post)
 exports.likeDislike = (req, res, _) => {
   switch (req.body.like) {
@@ -130,7 +127,7 @@ exports.likeDislike = (req, res, _) => {
       console.error("bad request");
   }
 };
-
+*/
 //module.exports = Blog;
 
-
+;

@@ -1,5 +1,6 @@
 //const mysql = require('mysql');
 const sql = require('mysql');
+//const sql = require('./db');
 
 //constructeur
   const Blog = function(blog1) {
@@ -10,6 +11,7 @@ const sql = require('mysql');
     this.blog_date = blog1.blog_date;
     this.blog_image = blog1.blog_image;
   };
+  console.log(Blog);
 
   Blog.createBlog = (newBlog, result) => {
     sql.query("INSERT INTO blog SET ?", newBlog, (err, res) => {
@@ -104,3 +106,5 @@ const sql = require('mysql');
   */
 
   module.exports = Blog;
+ 
+  

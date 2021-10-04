@@ -1,5 +1,6 @@
 //const mysql = require('mysql');
 const sql = require('mysql');
+const db = require("./app");
 
 //constructeur
   const User = function(user1) {
@@ -86,7 +87,6 @@ const sql = require('mysql');
         result({ kind: "not_found" }, null);
         return;
       }
-  
       console.log("deleted user with id: ", id);
       result(null, res);
     });

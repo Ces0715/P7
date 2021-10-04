@@ -6,7 +6,7 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const validator = require("email-validator");
 
-exports.signup = (req, res, next) => {
+exports.signup = (req, res, _next) => {
   const isValidateEmail = validator.validate(req.body.email)
   if (!isValidateEmail) {
     res.setHeader('Content-Type', 'application/json');
@@ -31,8 +31,10 @@ exports.signup = (req, res, next) => {
   }
 };
 
-exports.login = (req, res, next) => {
-  User.findOne({ user_mail: req.body.user_mail })
+exports.login = (req, res, _next) => {
+  User.findOne({ 
+    user_mail: req.body.user_mail })
+
     .then(user => {
       if (!user) {
         return res.status(401).json({ error: 'Utilisateur non trouvé !' });
