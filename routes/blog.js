@@ -20,7 +20,7 @@ router.delete('/:id', auth, blogCtrl.deleteBlog);
 
 module.exports = router;
 
-
+/*
 module.exports = app => {
     const blog = require("../controllers/blog");
     // Create a new Customer
@@ -37,4 +37,4 @@ module.exports = app => {
     app.delete("/blog", blog.deleteAllBlog);
 };
 
-
+*/

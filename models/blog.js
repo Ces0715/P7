@@ -25,7 +25,6 @@ const sql = require('mysql');
     });
   };
 
-  /*
   Blog.findById = (BlogId, result) => {
     sql.query(`SELECT * FROM blog WHERE id = ${BlogId}`, (err, res) => {
       if (err) {
@@ -42,7 +41,6 @@ const sql = require('mysql');
       result({ kind: "not_found" }, null);
     });
   };
-*/
 
   Blog.getAllBlog = result => {
     sql.query("SELECT * FROM blog", (err, res) => {
@@ -91,7 +89,7 @@ const sql = require('mysql');
       result(null, res);
     });
   };
-  /*
+  
   Blog.removeAll = result => {
     sql.query("DELETE FROM blogs", (err, res) => {
       if (err) {
@@ -103,7 +101,7 @@ const sql = require('mysql');
       result(null, res);
     });
   };
-  */
+  
 
   module.exports = Blog;
  

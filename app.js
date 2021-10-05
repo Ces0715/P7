@@ -1,16 +1,12 @@
-//ajout express
 const express = require('express');
 const app = express();
-//module 'dotenv' pour masquer les informations de connexion à la base de données à l'aide de variables d'environnement
 require("dotenv").config();
-//importer mysql pour utiliser la base de données
-const mysql = require('mysql');
-//Importer helmet pour securiser express (protection application)
 const helmet = require('helmet');
-// Donner acces au chemin (importer images)
 const path = require('path');
 const auth = require("./middleware/auth");
 
+//importer mysql pour utiliser la base de données
+const mysql = require('mysql');
 //connection à mysql
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -54,28 +50,7 @@ app.use((_req, res, next) => {
 // gestion des images
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-/*
-//DECLARATION DES ROUTES
-//importer la route dédiée aux blog
-const blogRoutes = require('./routes/blog');
-// Importer la route dédiée aux utilisateurs
-const userRoutes = require('./routes/user');
-// Va servir les routes dédiées au user
-app.use('/api/user', auth, userRoutes);
-// Va servir les routes dédiées au blog
-app.use('/api/blog', auth, blogRoutes);
-*/
 
-const blogRoutes = require('./routes/blog');
-app.use('/api/blog', auth, blogRoutes);
-
-
-app.get("/", (_req, res) => {
-  res.json({ message: "API  groupomania " });
-});
-app.post("/", (_req, res) => {
-  res.json({ message: "API  groupomania poste " });
-});
 
 app.get('/blog', function (_req, res) {
   db.query('SELECT * FROM blog', function (error, results, _fields) {
@@ -91,7 +66,7 @@ app.get('/user', function (_req, res) {
   });
 });
 
-// Retrieve user with id 
+// Recuperation user avec id 
 app.get('/user/:id', function (req, res) {
   let user_id = req.params.id;
   if (!user_id) {
@@ -103,42 +78,72 @@ app.get('/user/:id', function (req, res) {
   });
 });
 
-// Add a new user  
+// Ajout nouvel user 
 app.post('/user', function (req, res) {
   let user = req.body.user;
   if (!user) {
-    return res.status(400).send({ error:true, message: 'Please provide user' });
+    return res.status(400).send({ error:true, message: 'Ajouter nouvel user' });
   }
  db.query("INSERT INTO user SET ? ", { user: user }, function (error, results, fields) {
 if (error) throw error;
-  return res.send({ error: false, data: results, message: 'New user has been created successfully.' });
+  return res.send({ error: false, data: results, message: 'User crée.' });
   });
 });
 
-//  Update user with id
+//  Modifier user avec id
 app.put('/user', function (req, res) {
   let user_id = req.body.user_id;
   let user = req.body.user;
   if (!user_id || !user) {
-    return res.status(400).send({ error: user, message: 'Please provide user and user_id' });
+    return res.status(400).send({ error: user, message: 'Ajouter user et user_id' });
   }
   db.query("UPDATE user SET user = ? WHERE id = ?", [user, user_id], function (error, results, fields) {
     if (error) throw error;
-    return res.send({ error: false, data: results, message: 'user has been updated successfully.' });
+    return res.send({ error: false, data: results, message: 'User modifié.' });
    });
   });
 
-  //  Delete user
+  //  Supprimer user
  app.delete('/user', function (req, res) {
   let user_id = req.body.user_id;
   if (!user_id) {
-      return res.status(400).send({ error: true, message: 'Please provide user_id' });
+      return res.status(400).send({ error: true, message: 'Supprimer user_id' });
   }
   dbConn.query('DELETE FROM user WHERE id = ?', [user_id], function (error, results, fields) {
       if (error) throw error;
-      return res.send({ error: false, data: results, message: 'User has been updated successfully.' });
+      return res.send({ error: false, data: results, message: 'User supprimé.' });
   });
   }); 
-//exporter l'application
+
+/*
+//DECLARATION DES ROUTES
+//importer la route dédiée aux blog
+const blogRoutes = require('./routes/blog');
+// Importer la route dédiée aux utilisateurs
+const userRoutes = require('./routes/user');
+// Va servir les routes dédiées au user
+app.use('/api/user', auth, userRoutes);
+// Va servir les routes dédiées au blog
+app.use('/api/blog', auth, blogRoutes);
+
+*/
+
+
+  //exporter l'application
 module.exports = app;
 
+
+
+
+
+
+
+
+/*
+app.get("/", (_req, res) => {
+  res.json({ message: "API  groupomania " });
+});
+app.post("/", (_req, res) => {
+  res.json({ message: "API  groupomania poste " });
+});
+*/
