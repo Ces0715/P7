@@ -1,5 +1,5 @@
 //const mysql = require('mysql');
-const sql = require('mysql');
+const sql = require("./middleware/dbconnect");
 //const sql = require('./db');
 
 //constructeur

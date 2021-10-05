@@ -1,34 +1,19 @@
 const express = require('express');
 const app = express();
-require("dotenv").config();
 const helmet = require('helmet');
 const path = require('path');
 const auth = require("./middleware/auth");
+const db = require("./middleware/dbconnect");
 
-//importer mysql pour utiliser la base de données
-const mysql = require('mysql');
-//connection à mysql
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_DATABASE
-});
-
-db.connect(function (err) {
+db.query('SELECT * FROM blog', (err, rows) => {
   if (err) throw err;
-  console.log("Connecté à la base de données MySQL!");
-  db.query('SELECT * FROM blog', (err, rows) => {
-    if (err) throw err;
-    console.log('Données récupérées');
-    console.log(rows);
-  });
-  db.query('SELECT * FROM user', (err, rows) => {
-    if (err) throw err;
-    console.log('Users récupérés');
-    console.log(rows);
-  });
+  console.log('Données récupérées');
+  console.log(rows);
+});
+db.query('SELECT * FROM user', (err, rows) => {
+  if (err) throw err;
+  console.log('Users récupérés');
+  console.log(rows);
 });
 
 app.use((req, res, next) => {
@@ -37,7 +22,6 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
 });
-
 //transformation des données de la requete POST en JSON
 app.use(express.json());
 // secure HTTP headers
@@ -51,6 +35,12 @@ app.use((_req, res, next) => {
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 
+app.get("/", (_req, res) => {
+  res.json({ message: "API  groupomania " });
+});
+app.post("/", (_req, res) => {
+  res.json({ message: "API  groupomania poste " });
+});
 
 app.get('/blog', function (_req, res) {
   db.query('SELECT * FROM blog', function (error, results, _fields) {
@@ -115,6 +105,8 @@ app.put('/user', function (req, res) {
   });
   }); 
 
+  module.exports = app;
+
 /*
 //DECLARATION DES ROUTES
 //importer la route dédiée aux blog
@@ -126,24 +118,36 @@ app.use('/api/user', auth, userRoutes);
 // Va servir les routes dédiées au blog
 app.use('/api/blog', auth, blogRoutes);
 
+
+
+//importer mysql pour utiliser la base de données
+const mysql = require('mysql');
+//connection à mysql
+const db = mysql.createConnection({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_DATABASE
+});
+db.connect(function (err) {
+  if (err) throw err;
+  console.log("Connecté à la base de données MySQL!");
+  db.query('SELECT * FROM blog', (err, rows) => {
+    if (err) throw err;
+    console.log('Données récupérées');
+    console.log(rows);
+  });
+  db.query('SELECT * FROM user', (err, rows) => {
+    if (err) throw err;
+    console.log('Users récupérés');
+    console.log(rows);
+  });
+});
 */
 
 
-  //exporter l'application
-module.exports = app;
 
 
 
 
-
-
-
-
-/*
-app.get("/", (_req, res) => {
-  res.json({ message: "API  groupomania " });
-});
-app.post("/", (_req, res) => {
-  res.json({ message: "API  groupomania poste " });
-});
-*/
