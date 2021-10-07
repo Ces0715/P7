@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const path = require('path');
 const auth = require("./middleware/auth");
 const db = require("./middleware/dbconnect");
+//const Blog = require('./models/blog');
 
 db.query('SELECT * FROM blog', (err, rows) => {
   if (err) throw err;
@@ -34,13 +35,26 @@ app.use((_req, res, next) => {
 // gestion des images
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-
 app.get("/", (_req, res) => {
   res.json({ message: "API  groupomania " });
 });
 app.post("/", (_req, res) => {
   res.json({ message: "API  groupomania poste " });
 });
+
+//DECLARATION DES ROUTES
+//importer la route dédiée aux blog
+const blogRoutes = require('./routes/blog');
+// Importer la route dédiée aux utilisateurs
+const userRoutes = require('./routes/user');
+
+// Va servir les routes dédiées au user
+app.use('/api/user',  userRoutes);
+// Va servir les routes dédiées au blog
+app.use('/api/blog', blogRoutes);
+
+module.exports = app;
+
 
 app.get('/blog', function (_req, res) {
   db.query('SELECT * FROM blog', function (error, results, _fields) {
@@ -105,21 +119,7 @@ app.put('/user', function (req, res) {
   });
   }); 
 
-  module.exports = app;
-
-/*
-//DECLARATION DES ROUTES
-//importer la route dédiée aux blog
-const blogRoutes = require('./routes/blog');
-// Importer la route dédiée aux utilisateurs
-const userRoutes = require('./routes/user');
-// Va servir les routes dédiées au user
-app.use('/api/user', auth, userRoutes);
-// Va servir les routes dédiées au blog
-app.use('/api/blog', auth, blogRoutes);
-
-
-
+ /*
 //importer mysql pour utiliser la base de données
 const mysql = require('mysql');
 //connection à mysql

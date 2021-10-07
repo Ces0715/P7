@@ -1,15 +1,14 @@
 //const mysql = require('mysql');
-const sql = require("./middleware/dbconnect");
-//const sql = require('./db');
+const sql = require("../middleware/dbconnect");
 
 //constructeur
-  const Blog = function(blog1) {
-    this.blog_id = blog1.blog_id;
-    this.bloguser_id = blog1.bloguser_id;
-    this.blog_titre = blog1.blog_titre;
-    this.blog_text = blog1.blog_text;
-    this.blog_date = blog1.blog_date;
-    this.blog_image = blog1.blog_image;
+  const Blog = function(blog) {
+    this.blog_id = blog.blog_id;
+    this.bloguser_id = blog.bloguser_id;
+    this.blog_titre = blog.blog_titre;
+    this.blog_text = blog.blog_text;
+    this.blog_date = blog.blog_date;
+    this.blog_image = blog.blog_image;
   };
   console.log(Blog);
 
@@ -101,8 +100,7 @@ const sql = require("./middleware/dbconnect");
       result(null, res);
     });
   };
-  
-
+ 
   module.exports = Blog;
  
   

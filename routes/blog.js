@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
-const blogCtrl = require('../controllers/blog');
-
+//const blogCtrl = require('../controllers/blog');
 
 const {
     createBlog,
@@ -12,13 +11,15 @@ const {
     getOneBlog,
     getAllBlog,
   } = require('../controllers/blog');
-router.get('/', auth, blogCtrl.getAllBlog);
-router.post('/', auth, multer, blogCtrl.createBlog);
-router.get('/:id', auth, blogCtrl.getOneBlog);
-router.put('/:id', auth, blogCtrl.modifyOneBlog);
-router.delete('/:id', auth, blogCtrl.deleteBlog);
+
+router.get('/', auth, getAllBlog);
+router.post('/', auth, multer, createBlog);
+router.get('/:id', auth, getOneBlog);
+router.put('/:id', auth, modifyOneBlog);
+router.delete('/:id', auth, deleteBlog);
 
 module.exports = router;
+
 
 /*
 module.exports = app => {

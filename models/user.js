@@ -1,6 +1,4 @@
-//const mysql = require('mysql');
-const sql = require('mysql');
-const db = require("./app");
+const sql = require("../middleware/dbconnect");
 
 //constructeur
   const User = function(user1) {

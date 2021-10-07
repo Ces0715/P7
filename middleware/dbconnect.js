@@ -1,6 +1,7 @@
 //importer mysql pour utiliser la base de données
 const mysql = require('mysql');
 require("dotenv").config();
+
 //connection à mysql
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -12,8 +13,7 @@ const db = mysql.createConnection({
 
 db.connect(function (err) {
     if (err) throw err;
-    console.log("Connecté à la base de données MySQL!");
-    
+    console.log("Connecté à la base de données MySQL!");   
   });
-
+  
 module.exports = db;
