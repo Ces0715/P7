@@ -2,16 +2,16 @@ const express = require('express');
 const app = express();
 const helmet = require('helmet');
 const path = require('path');
-const auth = require("./middleware/auth");
+//const auth = require("./middleware/auth");
 const db = require("./middleware/dbconnect");
-//const Blog = require('./models/blog');
+require("./routes/blog");
 
-db.query('SELECT * FROM blog', (err, rows) => {
+db.query('SELECT * FROM blogs', (err, rows) => {
   if (err) throw err;
   console.log('Données récupérées');
   console.log(rows);
 });
-db.query('SELECT * FROM user', (err, rows) => {
+db.query('SELECT * FROM users', (err, rows) => {
   if (err) throw err;
   console.log('Users récupérés');
   console.log(rows);
@@ -47,15 +47,14 @@ app.post("/", (_req, res) => {
 const blogRoutes = require('./routes/blog');
 // Importer la route dédiée aux utilisateurs
 const userRoutes = require('./routes/user');
-
 // Va servir les routes dédiées au user
-app.use('/api/user',  userRoutes);
+app.use('/api/users',  userRoutes);
 // Va servir les routes dédiées au blog
-app.use('/api/blog', blogRoutes);
+app.use('api/blogs', blogRoutes);
 
 module.exports = app;
 
-
+/*
 app.get('/blog', function (_req, res) {
   db.query('SELECT * FROM blog', function (error, results, _fields) {
       if (error) throw error;
@@ -145,6 +144,7 @@ db.connect(function (err) {
   });
 });
 */
+
 
 
 

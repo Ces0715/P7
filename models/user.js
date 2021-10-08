@@ -1,17 +1,18 @@
 const sql = require("../middleware/dbconnect");
 
 //constructeur
-  const User = function(user1) {
-    this.user_id = user1.user_id;
-    this.user_nom = user1.user_nom;
-    this.user_prenom = user1.user_prenom;
-    this.user_login = user1.user_login;
-    this.user_mail = user1.user_mail;
-    this.user_mp = user1.user_mp;
+  const User = function(user) {
+    this.user_id = user.user_id;
+    this.user_nom = user.user_nom;
+    this.user_prenom = user.user_prenom;
+    this.user_login = user.user_login;
+    this.user_mail = user.user_mail;
+    this.user_mp = user.user_mp;
   };
+  console.log(User);
 
   User.create = (newUser, result) => {
-    sql.query("INSERT INTO user SET ?", newUser, (err, res) => {
+    sql.query("INSERT INTO users SET ?", newUser, (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(err, null);
@@ -23,7 +24,7 @@ const sql = require("../middleware/dbconnect");
   };
 
   User.findById = (UserId, result) => {
-    sql.query(`SELECT * FROM user WHERE id = ${UserId}`, (err, res) => {
+    sql.query(`SELECT * FROM users WHERE id = ${UserId}`, (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(err, null);
@@ -40,7 +41,7 @@ const sql = require("../middleware/dbconnect");
   };
 
   User.getAll = result => {
-    sql.query("SELECT * FROM user", (err, res) => {
+    sql.query("SELECT * FROM users", (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(null, err);

@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
-//const blogCtrl = require('../controllers/blog');
+const blogs = require('../controllers/blog');
 
+/*
 const {
     createBlog,
     modifyOneBlog,
@@ -11,31 +12,31 @@ const {
     getOneBlog,
     getAllBlog,
   } = require('../controllers/blog');
-
-router.get('/', auth, getAllBlog);
-router.post('/', auth, multer, createBlog);
-router.get('/:id', auth, getOneBlog);
-router.put('/:id', auth, modifyOneBlog);
-router.delete('/:id', auth, deleteBlog);
+*/
+router.get('/', auth, blogs.getAllBlog);
+router.post('/', auth, multer, blogs.createBlog);
+router.get('/:id', auth, blogs.getOneBlog);
+router.put('/:id', auth, blogs.modifyOneBlog);
+router.delete('/:id', auth, blogs.deleteBlog);
 
 module.exports = router;
 
 
 /*
 module.exports = app => {
-    const blog = require("../controllers/blog");
+    const blogs = require("../controllers/blog");
     // Create a new Customer
-    app.post("/blog", blog.createBlog);
+    app.post("/blogs", blogs.createBlog);
     // Retrieve all Customers
-    app.get("/blog", blog.findAllBlog);
+    app.get("/blogs", blogs.getAllBlog);
     // Retrieve a single Customer with customerId
-    app.get("/blog/:blogId", blog.findOneBlog);
+    app.get("/blogs/:blogId", blogs.getOneBlog);
     // Update a Customer with customerId
-    app.put("/blog/:blogId", blog.modifyOneBlog);
+    app.put("/blogs/:blogId", blogs.modifyOneBlog);
     // Delete a Customer with customerId
-    app.delete("/blog/:blogId", blog.deleteBlog);
+    app.delete("/blogs/:blogId", blogs.deleteBlog);
     // Create a new Customer
-    app.delete("/blog", blog.deleteAllBlog);
+    //app.delete("/blogs", blogs.deleteAllBlog);
 };
 
 */

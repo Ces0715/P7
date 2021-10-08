@@ -3,6 +3,7 @@ const Blog = require('../models/blog');
 // recuperer modele file system pour les images
 const fs = require('fs');
 
+
 //creer un blog (route POST)
 exports.createBlog = (req, res, next) => {
   const blogObject = JSON.parse(req.body.blog);
@@ -16,6 +17,10 @@ exports.createBlog = (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
   next();
 };
+
+
+
+
 
 // modifier un blog (put)
 exports.modifyOneBlog = (req, res, _) => {
@@ -44,9 +49,10 @@ exports.deleteBlog = (req, res, next) => {
 };
 
 //accéder à un blog (route get)
+
 exports.getOneBlog = (req, res, _) => {
-  Blog.findOne({ blog_id: req.params.id })
-    .then((blog) => { res.status(200).json(blog); })
+  Blog.findOne({ blog_id: req.params.blog_id })
+    .then((blogs) => { res.status(200).json(blogs); })
     .catch((error) => {
       res.status(404).json({ error });
     });

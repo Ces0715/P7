@@ -13,7 +13,7 @@ const sql = require("../middleware/dbconnect");
   console.log(Blog);
 
   Blog.createBlog = (newBlog, result) => {
-    sql.query("INSERT INTO blog SET ?", newBlog, (err, res) => {
+    sql.query("INSERT INTO blogs SET ?", newBlog, (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(err, null);
@@ -24,8 +24,8 @@ const sql = require("../middleware/dbconnect");
     });
   };
 
-  Blog.findById = (BlogId, result) => {
-    sql.query(`SELECT * FROM blog WHERE id = ${BlogId}`, (err, res) => {
+  Blog.getOneBlog = (BlogId, result) => {
+    sql.query(`SELECT * FROM blogs WHERE id = ${BlogId}`, (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(err, null);
@@ -42,7 +42,7 @@ const sql = require("../middleware/dbconnect");
   };
 
   Blog.getAllBlog = result => {
-    sql.query("SELECT * FROM blog", (err, res) => {
+    sql.query("SELECT * FROM blogs", (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(null, err);
@@ -88,7 +88,7 @@ const sql = require("../middleware/dbconnect");
       result(null, res);
     });
   };
-  
+  /*
   Blog.removeAll = result => {
     sql.query("DELETE FROM blogs", (err, res) => {
       if (err) {
@@ -100,7 +100,7 @@ const sql = require("../middleware/dbconnect");
       result(null, res);
     });
   };
- 
+ */
   module.exports = Blog;
  
   
