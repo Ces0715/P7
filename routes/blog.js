@@ -10,6 +10,16 @@ router.get('/:id', auth, blogs.getOneBlog);
 router.put('/:id', auth, blogs.modifyOneBlog);
 router.delete('/:id', auth, blogs.deleteBlog);
 
+
+
+
+router.get('/blogs', function (_req, res) {
+    db.query('SELECT * FROM blogs', function (error, results, _fields) {
+        if (error) throw error;
+        return res.send({ data: results, message: 'blog list.' });
+    });
+  });
+
 module.exports = router;
 
 

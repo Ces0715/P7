@@ -3,6 +3,11 @@ const Blog = require('../models/blog');
 // recuperer modele file system pour les images
 const fs = require('fs');
 
+exports.createBlog
+
+
+
+/*
 //creer un blog (route POST)
 exports.createBlog = (req, res, next) => {
   const blogObject = JSON.parse(req.body.blog);

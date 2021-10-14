@@ -10,8 +10,10 @@ const sql = require("../middleware/dbconnect");
     this.user_mp = user.user_mp;
   };
   console.log(User);
+  
+  module.exports = User;
 
-
+/*
   User.signUp = (newUser, result) => {
     sql.query("INSERT INTO users SET ?", newUser, (err, res) => {
       if (err) {
