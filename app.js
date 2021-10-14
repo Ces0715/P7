@@ -4,7 +4,6 @@ const helmet = require('helmet');
 const path = require('path');
 //const auth = require("./middleware/auth");
 const db = require("./middleware/dbconnect");
-require("./routes/blog");
 
 db.query('SELECT * FROM blogs', (err, rows) => {
   if (err) throw err;
@@ -23,24 +22,16 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
 });
-//transformation des données de la requete POST en JSON
 app.use(express.json());
-// secure HTTP headers
 app.use(helmet());
-// cross-scripting protection (helmet)
+
 app.use((_req, res, next) => {
   res.setHeader("X-XSS-Protection", "1; mode=block");
   next();
 });
-// gestion des images
+
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-app.get("/", (_req, res) => {
-  res.json({ message: "API  groupomania " });
-});
-app.post("/", (_req, res) => {
-  res.json({ message: "API  groupomania poste " });
-});
 
 //DECLARATION DES ROUTES
 //importer la route dédiée aux blog
@@ -48,15 +39,32 @@ const blogRoutes = require('./routes/blog');
 // Importer la route dédiée aux utilisateurs
 const userRoutes = require('./routes/user');
 // Va servir les routes dédiées au user
-app.use('/api/users',  userRoutes);
+//app.use('/api/users',  userRoutes);
+app.use("/api/users", userRoutes);
 // Va servir les routes dédiées au blog
-app.use('api/blogs', blogRoutes);
+app.use('/api/blogs', blogRoutes);
 
 module.exports = app;
 
+
+
+
+
+
+
+
+
+
 /*
+
+app.get("/", (_req, res) => {
+  res.json({ message: "API  groupomania " });
+});
+app.post("/", (_req, res) => {
+  res.json({ message: "API  groupomania poste " });
+});
 app.get('/blog', function (_req, res) {
-  db.query('SELECT * FROM blog', function (error, results, _fields) {
+  db.query('SELECT * FROM blogs', function (error, results, _fields) {
       if (error) throw error;
       return res.send({ data: results, message: 'blog list.' });
   });

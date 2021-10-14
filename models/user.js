@@ -11,7 +11,8 @@ const sql = require("../middleware/dbconnect");
   };
   console.log(User);
 
-  User.create = (newUser, result) => {
+
+  User.signUp = (newUser, result) => {
     sql.query("INSERT INTO users SET ?", newUser, (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -19,11 +20,11 @@ const sql = require("../middleware/dbconnect");
         return;
       }
       console.log("created user: ", { id: res.insertId, ...newUser });
-      result(null, { id: res.insertId, ...newCustomer });
+      result(null, { id: res.insertId, ...newUser });
     });
   };
 
-  User.findById = (UserId, result) => {
+  User.login = (UserId, result) => {
     sql.query(`SELECT * FROM users WHERE id = ${UserId}`, (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -40,7 +41,8 @@ const sql = require("../middleware/dbconnect");
     });
   };
 
-  User.getAll = result => {
+  
+  User.getAllUsers =  function (result) {
     sql.query("SELECT * FROM users", (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -52,6 +54,9 @@ const sql = require("../middleware/dbconnect");
     });
   };
 
+  module.exports = User;
+  
+/*
   User.updateById = (id, user, result) => {
     sql.query("UPDATE users SET mail = ?, nom = ?, prenom = ?, login = ?, mp = ? WHERE id = ?",
       [user.user_mail, user.user_nom, user.user_prenom, user.user_login, user.user_mp, id],
@@ -61,18 +66,16 @@ const sql = require("../middleware/dbconnect");
           result(null, err);
           return;
         }
-  
         if (res.affectedRows == 0) {
           // not found User with the id
           result({ kind: "not_found" }, null);
           return;
         }
-  
         console.log("updated user: ", { id: id, ...user });
         result(null, { id: id, ...user });
       });
   };
-
+ 
   User.remove = (id, result) => {
     sql.query("DELETE FROM users WHERE id = ?", id, (err, res) => {
       if (err) {
@@ -80,7 +83,6 @@ const sql = require("../middleware/dbconnect");
         result(null, err);
         return;
       }
-  
       if (res.affectedRows == 0) {
         // not found User with the id
         result({ kind: "not_found" }, null);
@@ -98,14 +100,13 @@ const sql = require("../middleware/dbconnect");
         result(null, err);
         return;
       }
-  
       console.log(`deleted ${res.affectedRows} users`);
       result(null, res);
     });
   };
 
-  module.exports = User;
 
+*/
 
 
   

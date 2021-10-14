@@ -88,6 +88,10 @@ const sql = require("../middleware/dbconnect");
       result(null, res);
     });
   };
+
+  module.exports = Blog;
+
+
   /*
   Blog.removeAll = result => {
     sql.query("DELETE FROM blogs", (err, res) => {
@@ -101,6 +105,6 @@ const sql = require("../middleware/dbconnect");
     });
   };
  */
-  module.exports = Blog;
+  
  
   

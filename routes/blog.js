@@ -4,15 +4,6 @@ const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
 const blogs = require('../controllers/blog');
 
-/*
-const {
-    createBlog,
-    modifyOneBlog,
-    deleteBlog,
-    getOneBlog,
-    getAllBlog,
-  } = require('../controllers/blog');
-*/
 router.get('/', auth, blogs.getAllBlog);
 router.post('/', auth, multer, blogs.createBlog);
 router.get('/:id', auth, blogs.getOneBlog);
