@@ -11,6 +11,18 @@ const sql = require("../middleware/dbconnect");
     this.blog_image = blog.blog_image;
   };
   console.log(Blog);
+  
+  Blog.getAllBlog = (result) => {
+    sql.query("SELECT * FROM blogs", (err, res) => {
+      if (err) {
+        console.log("erreur:", err);
+        result(null, err);
+        return;
+      }
+      console.log("blog: ", res);
+      result(null, res);
+    });
+  };
 
   Blog.createBlog = (newBlog, result) => {
     sql.query("INSERT INTO blogs SET ?", newBlog, (err, res) => {
@@ -41,17 +53,7 @@ const sql = require("../middleware/dbconnect");
     });
   };
 
-  Blog.getAllBlog = result => {
-    sql.query("SELECT * FROM blogs", (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(null, err);
-        return;
-      }
-      console.log("blog: ", res);
-      result(null, res);
-    });
-  };
+  
 
   Blog.modifyOneBlog = (id, blog, result) => {
     sql.query("UPDATE blogs SET titre = ?, text = ?, date = ?, images = ? WHERE id = ?",
@@ -89,7 +91,7 @@ const sql = require("../middleware/dbconnect");
     });
   };
 
-  module.exports = Blog;
+ 
 
 
   /*
@@ -107,4 +109,4 @@ const sql = require("../middleware/dbconnect");
  */
   
  
-  
+  module.exports = Blog;

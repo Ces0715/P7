@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const helmet = require('helmet');
 const path = require('path');
+const router = express.Router();
 //const auth = require("./middleware/auth");
 const db = require("./middleware/dbconnect");
 
@@ -37,9 +38,16 @@ app.post("/", (_req, res) => {
   res.json({ message: "API  groupomania poste " });
 });
 
+//const blogRoutes = require('./routes/blog');
+//const userRoutes = require('./routes/user');
+
+//app.use('/api/blog', blogRoutes);
+//app.use('/api/user', userRoutes);
+module.exports = app;
+
 
 // Ajout nouveau blog 
-app.post('/blogs', function (req, res) {
+app.post('/api/blogs', function (req, res) {
   let blog = req.body.blog;
   if (!blog) {
     return res.status(400).send({ error:true, message: 'Ajouter nouveau blog' });
@@ -103,17 +111,6 @@ app.get('/blogs/:id', function (req, res) {
 //app.use('/api/blogs', blogRoutes);
 
 
-
-module.exports = app;
-
-
-
-
-
-
-
-
-
 app.get('/api/users', function (_req, res) {
   db.query('SELECT * FROM users', function (error, results, _fields) {
       if (error) throw error;
@@ -170,36 +167,7 @@ app.put('/user', function (req, res) {
   });
   }); 
 
- /*
-//importer mysql pour utiliser la base de données
-const mysql = require('mysql');
-//connection à mysql
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_DATABASE
-});
-db.connect(function (err) {
-  if (err) throw err;
-  console.log("Connecté à la base de données MySQL!");
-  db.query('SELECT * FROM blog', (err, rows) => {
-    if (err) throw err;
-    console.log('Données récupérées');
-    console.log(rows);
-  });
-  db.query('SELECT * FROM user', (err, rows) => {
-    if (err) throw err;
-    console.log('Users récupérés');
-    console.log(rows);
-  });
-});
-*/
-
-
-
-
+ 
 
 
 

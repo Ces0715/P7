@@ -2,10 +2,28 @@
 const Blog = require('../models/blog');
 // recuperer modele file system pour les images
 const fs = require('fs');
+const db = require("../middleware/dbconnect");
 
-exports.createBlog
+exports.createBlog = (req, res) => {
+  let blog = req.body.blog;
+  if (!blog) {
+    return res.status(400).send({ error: true, message: 'Ajouter nouveau blog' });
+  }
+  db.query("INSERT INTO blogs SET ? ", { blog: blog }, function (error, results, fields) {
+    if (error)
+      throw error;
+    return res.send({ error: false, data: results, message: 'blog crée.' });
+  });
+}
 
-
+exports.getAllBlog = (_req, res) => {
+  res.send('hello');
+      db.query('SELECT * FROM blogs', (error, results, _fields) => {
+          if (error)
+              throw error;
+          return res.send({ data: results, message: 'blog list.' });
+      });
+  }
 
 /*
 //creer un blog (route POST)

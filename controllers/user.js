@@ -1,4 +1,3 @@
-// hasher le MP des utilisateurs
 const bcrypt = require('bcrypt');
 // recuperer model user
 const User = require('../models/user');
