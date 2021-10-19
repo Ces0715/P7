@@ -38,16 +38,17 @@ app.post("/", (_req, res) => {
   res.json({ message: "API  groupomania poste " });
 });
 
-//const blogRoutes = require('./routes/blog');
+const blogRoutes = require('./routes/blog');
+app.use('/blogs', blogRoutes);
 //const userRoutes = require('./routes/user');
-
-//app.use('/api/blog', blogRoutes);
 //app.use('/api/user', userRoutes);
 module.exports = app;
 
 
+
+/*
 // Ajout nouveau blog 
-app.post('/api/blogs', function (req, res) {
+app.post('/blogs', function (req, res) {
   let blog = req.body.blog;
   if (!blog) {
     return res.status(400).send({ error:true, message: 'Ajouter nouveau blog' });
@@ -102,16 +103,9 @@ app.get('/blogs/:id', function (req, res) {
     return res.send({ error: false, data: results[0], message: 'blogs list.' });
   });
 });
+*/
 
-
-//DECLARATION DES ROUTES importer et servir les routes dédiée 
-//const blogRoutes = require('./routes/blog');
-//const userRoutes = require('./routes/user');
-//app.use('api/users', userRoutes);
-//app.use('/api/blogs', blogRoutes);
-
-
-app.get('/api/users', function (_req, res) {
+app.get('/users', function (_req, res) {
   db.query('SELECT * FROM users', function (error, results, _fields) {
       if (error) throw error;
       return res.send({ data: results, message: 'user list.' });
@@ -131,7 +125,7 @@ app.get('/users/:id', function (req, res) {
 });
 
 // Ajout nouvel user 
-app.post('/user', function (req, res) {
+app.post('/users', function (req, res) {
   let user = req.body.user;
   if (!user) {
     return res.status(400).send({ error:true, message: 'Ajouter nouvel user' });
@@ -143,7 +137,7 @@ if (error) throw error;
 });
 
 //  Modifier user avec id
-app.put('/user', function (req, res) {
+app.put('/users', function (req, res) {
   let user_id = req.body.user_id;
   let user = req.body.user;
   if (!user_id || !user) {
@@ -156,7 +150,7 @@ app.put('/user', function (req, res) {
   });
 
   //  Supprimer user
- app.delete('/user', function (req, res) {
+ app.delete('/users', function (req, res) {
   let user_id = req.body.user_id;
   if (!user_id) {
       return res.status(400).send({ error: true, message: 'Supprimer user_id' });

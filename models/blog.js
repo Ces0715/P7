@@ -27,7 +27,7 @@ const sql = require("../middleware/dbconnect");
   Blog.createBlog = (newBlog, result) => {
     sql.query("INSERT INTO blogs SET ?", newBlog, (err, res) => {
       if (err) {
-        console.log("error: ", err);
+        console.log("erreur: ", err);
         result(err, null);
         return;
       }
@@ -51,9 +51,7 @@ const sql = require("../middleware/dbconnect");
       // not found Blog with the id
       result({ kind: "not_found" }, null);
     });
-  };
-
-  
+  }; 
 
   Blog.modifyOneBlog = (id, blog, result) => {
     sql.query("UPDATE blogs SET titre = ?, text = ?, date = ?, images = ? WHERE id = ?",
@@ -90,9 +88,6 @@ const sql = require("../middleware/dbconnect");
       result(null, res);
     });
   };
-
- 
-
 
   /*
   Blog.removeAll = result => {

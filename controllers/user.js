@@ -7,7 +7,9 @@ const validator = require("email-validator");
 require("dotenv").config();
 const sql = require("../middleware/dbconnect");
 
-exports.signUp = (req, res, _next) => {
+
+
+exports.signup = (req, res, _next) => {
   const isValidateEmail = validator.validate(req.body.email)
   if (!isValidateEmail) {
     res.setHeader('Content-Type', 'application/json');
@@ -55,7 +57,7 @@ exports.signUp = (req, res, _next) => {
 
 
   //Fonction qui gère la logique métier de la route POST (connexion d'un user existant dans la database)
-  exports.login = (req, res, next) => {
+  exports.login = (req, res, _next) => {
     //Recherche de l'utilisateur dans la DB via son email 
     let sql1 = `SELECT * FROM users WHERE user_mail = ?`;
     sql.query(sql1, [req.body.user_mail], function (err, data, fields) {

@@ -78,6 +78,8 @@ const jwt = require("jsonwebtoken");
         }
     });
 };
+module.exports = User;
+}
   
 /*
   User.updateById = (id, user, result) => {
@@ -131,5 +133,3 @@ const jwt = require("jsonwebtoken");
 
 */
 
-module.exports = User;
-}
