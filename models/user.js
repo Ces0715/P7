@@ -13,10 +13,12 @@ const jwt = require("jsonwebtoken");
   };
   console.log(User);
   
+//fonction pour créer un nouveau compte
   User.signup = (newUser, result) => {
+    // mettre info dans la table users
     sql.query("INSERT INTO users SET ?", newUser, (err, res) => {
       if (err) {
-        console.log("erreur: ", err);
+        console.log("erreur:", err);
         result(err, null);
         return;
       }
@@ -25,12 +27,14 @@ const jwt = require("jsonwebtoken");
     });
   };
 
-  User.login = (mail,mp, result) => {
-    sql.query(`SELECT * FROM users WHERE email = ?`,mail, (err, res) => {
+  //fonction pour créer login du compte
+  User.login = (user_mail, user_mp, result) => {
+    // recuperer infos du user qui a un mail
+    sql.query(`SELECT * FROM users WHERE user_mail = ?`,user_mail, (err, res) => {
        //si email dans bd
        if (res.length > 0) {
-        //comparer le mp avec celui de bd
-        bcrypt.compare(mp, res[0].user_mp).then((valid) => {
+        //comparer le mp avec celui de la bd
+        bcrypt.compare(user_mp, res[0].user_mp).then((valid) => {
             // si pas de correspondance erreur
             if (!valid) {
                 console.log("error :", err);
@@ -46,13 +50,15 @@ const jwt = require("jsonwebtoken");
             }
         });
     } else {
-        // if the email doesn't match, throw error
+        // si pas de correspondance renvoie une erreur
         console.log("error :", err);
         result(err, null);
         return;
     }
 });
 
+
+//fonction pour récuperer tous les users
   User.getAllUsers =  function (result) {
     sql.query("SELECT * FROM users", (err, res) => {
       if (err) {
@@ -65,6 +71,7 @@ const jwt = require("jsonwebtoken");
     });
   };
 
+  //fonction pour recuperer un user
   User.getOne = (userId, result) => {
     //retrieves infos for the user whse id is provided
     sql.query(`SELECT user_id, user_nom, user_prenom, user_login, user_mp, user_mail FROM users WHERE id = ${userId}`, (err, res) => {
@@ -80,7 +87,9 @@ const jwt = require("jsonwebtoken");
 };
 module.exports = User;
 }
-  
+ 
+
+
 /*
   User.updateById = (id, user, result) => {
     sql.query("UPDATE users SET mail = ?, nom = ?, prenom = ?, login = ?, mp = ? WHERE id = ?",
@@ -129,7 +138,6 @@ module.exports = User;
       result(null, res);
     });
   };
-
 
 */
 

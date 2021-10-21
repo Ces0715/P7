@@ -39,10 +39,11 @@ app.post("/", (_req, res) => {
 });
 
 const blogRoutes = require('./routes/blog');
-app.use('/blogs', blogRoutes);
+app.use('/api/blogs', blogRoutes);
 //const userRoutes = require('./routes/user');
 //app.use('/api/user', userRoutes);
-module.exports = app;
+
+module.exports = router;
 
 
 

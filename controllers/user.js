@@ -5,10 +5,51 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const validator = require("email-validator");
 require("dotenv").config();
-const sql = require("../middleware/dbconnect");
+const db = require("../middleware/dbconnect");
 
 
+//fonction pour créer un user
+exports.createUser = function(req,res){
+  const isValidateEmail = validator.validate(req.body.user_mail)
+  if (!isValidateEmail) {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(400).json({ error: "Veuillez entrer un email valide" });
+  }
+  else {
+    bcrypt.hash(req.body.user_mp, 10)
+      .then(hash => {
+        const user = new User({
+          user_id: req.body.user_id,
+          user_nom: req.body.user_nom,
+          user_prenom: req.body.user_prenom,
+          user_mail: req.body.user_mail,
+          user_login: req.body.user_login,
+          user_mp: hash,
+        });
+      });      
+  
+  User.signup(user, (err, data) => {
+  if (err)
+      res.status(500).send({
+          message: err.message || "PROBLEME creation user !",
+      });
+  else res.send(data);
+});
+}
 
+//fonction pour récuperer tous les users
+exports.getAllUsers = function (req, res) {
+  let user = req.body.user;
+  if (!user) {
+    return res.status(400).send({ error:true, message: 'Ajouter nouvel user' });
+  }
+ db.query("INSERT INTO users SET ? ", { user: user }, function (error, results, fields) {
+if (error) throw error;
+  return res.send({ error: false, data: results, message: 'User crée.' });
+  });
+}
+
+/*
 exports.signup = (req, res, _next) => {
   const isValidateEmail = validator.validate(req.body.email)
   if (!isValidateEmail) {
@@ -118,71 +159,9 @@ exports.getAllUsers = (req, res, next) => {
     });
   };
 
-  exports.signUp = (req, res, _next) => {
-    const isValidateEmail = validator.validate(req.body.email)
-    if (!isValidateEmail) {
-      res.setHeader('Content-Type', 'application/json');
-      res.status(400).json({ error: "Veuillez entrer un email valide" });
-    }
-    else {
-      bcrypt.hash(req.body.password, 10)
-        .then(hash => {
-          const user = new User({
-            user_id: req.body.user_id,
-            user_nom: req.body.user_nom,
-            user_prenom: req.body.user_prenom,
-            user_mail: req.body.user_mail,
-            user_login: req.body.user_login,
-            user_mp: hash
-          });
-          user.save()
-            .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-            .catch(error => res.status(400).json({ error }));
-        })
-        .catch(error => res.status(500).json({ error }));
-    }
-  };
   
-  exports.login = (req, res, _next) => {
-    User.findOne({ 
-      user_mail: req.body.user_mail })
-      .then(user => {
-        if (!user) {
-          return res.status(401).json({ error: 'Utilisateur non trouvé !' });
-        }
-        bcrypt.compare(req.body.user_mp, user.user_mp)
-          .then(valid => {
-            if (!valid) {
-              return res.status(401).json({ error: 'Mot de passe incorrect !' });
-            }
-            res.status(200).json({
-              userId: user._id,
-              token: jwt.sign(
-                { userId: user._id },
-                process.env.SECRET_TOKEN,
-                //'RANDOM_TOKEN_SECRET',
-                { expiresIn: '24h' }
-              )
-            });
-          })
-          .catch(error => res.status(500).json({ error }));
-      })
-      .catch(error => res.status(500).json({ error }));
-  };
-  
-  exports.getAllUsers = (_req, res) => {
-    console.log("message");
-  
-    
-    User.find((err, data) => {
-      if (err)
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving customers."
-        });
-      else res.send(data);
-    });
    */
-};
 
-//module.exports = User;
+
+module.exports = User;
+}; 
