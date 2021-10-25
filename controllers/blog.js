@@ -5,29 +5,24 @@ const Blog = require('../models/blog');
 //const fs = require('fs');
 const db = require("../middleware/dbconnect");
 
-exports.getAllBlog = function (_req, res)  {
-  Blog.getAllBlog(function (err, data)  {
-    console.log('controller');
-    if (err)
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving customers."
-      });
-    else res.send(data);
+exports.getAllBlog = function (_req, res) {
+  db.query('SELECT * FROM blogs', function (error, results, _fields) {
+      if (error) throw error;
+      return res.send({ data: results, message: 'blog list.' });
   });
 }
 
-exports.getAllBlog = (_req, res) => {
-  Blog.getAllBlog((err, data) => {
-    if (err)
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving customers."
-      });
-    else res.send(data);
-  });
-}
- 
+/*
+exports.getAllBlog = function (_req, res) {
+  Blog.getAllBlog( function (err, blogs) {
+    if (err) return res.status(500).send('Error occured during fetching items');
+		console.log('items: ', blogs);
+		
+		return res.send(blogs);
+	});
+};
+*/
+
 exports.createBlog = (req, res) => {
   let blog = req.body.blog;
   if (!blog) {
@@ -78,6 +73,18 @@ module.exports = Blog;
 ;
 
 /*
+
+
+exports.getAllBlog = (_req, res) => {
+  Blog.getAllBlog((err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving customers."
+      });
+    else res.send(data);
+  });
+}
 exports.create = (req, res) => {
   // Validate request
   if (!req.body) {

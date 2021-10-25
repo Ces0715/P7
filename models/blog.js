@@ -1,7 +1,7 @@
 const db = require("../middleware/dbconnect");
-const sql = require("./db");
+//const sql = require("./db");
 require("dotenv").config();
-
+'use strict';
 //constructeur
   const Blog = function(blog) {
     this.blog_id = blog.blog_id;
@@ -10,26 +10,43 @@ require("dotenv").config();
     this.blog_text = blog.blog_text;
     this.blog_date = blog.blog_date;
     this.blog_image = blog.blog_image;
+    
   };
   
   //fonction pour récuperer infos tous les blogs
-  Blog.getAllBlog = (result) => {
-    sql.query("SELECT * FROM blogs", (err, res) => {
+  Blog.getAllBlog = function (result)  {
+    db.query("SELECT * FROM blogs",function (err, res)  {
       //selectionner infos et joindre les 2 tables  
     //db.query("SELECT blogs.blog_id, blogs.bloguser_id, blogs.blog_titre, blogs.blog_text, blogs.blog_date, blogs.blog.blog_image FROM blogs INNER JOIN users ON blogs.userblog_id = users.user_id ORDER BY blogs.blog_id DESC", 
       if (err) {
         console.log("erreur:", err);
         //result(null, err);
-        return;
+        //return;
       }
-      console.log("blogs:", res);
-      //result(null, res);
+      else{
+        console.log("blogs:", res);
+        //result(null, res);
+      }
+      
     });
   };
+/*
+  Blog.getAllBlog = function (result) {
+    let sql = 'SELECT * FROM blogs';
+    db.query(sql, function (err, rows, _fields) {
+        console.log("error: ", err);
+        if (err)
+          result(err, null);
+
+        console.log(rows);
+        result(null, rows);
+      });
+  };
+*/
 
   //fonction pour créer un blog
   Blog.createBlog = (newBlog, result) => {
-    sql.query("INSERT INTO blogs SET ?", newBlog, (err, res) => {
+    db.query("INSERT INTO blogs SET ?", newBlog, (err, res) => {
       if (err) {
         console.log("erreur: ", err);
         result(err, null);
@@ -41,7 +58,7 @@ require("dotenv").config();
   };
 
   Blog.getOneBlog = (BlogId, result) => {
-    sql.query(`SELECT * FROM blogs WHERE blog_id = ${BlogId}`, (err, res) => {
+    db.query(`SELECT * FROM blogs WHERE blog_id = ${BlogId}`, (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(err, null);
@@ -58,7 +75,7 @@ require("dotenv").config();
   }; 
 
   Blog.modifyOneBlog = (id, blog, result) => {
-    sql.query("UPDATE blogs SET blog_titre = ?, blog_text = ?, blog_date = ?, blog_images = ? WHERE blog_id = ?",
+    db.query("UPDATE blogs SET blog_titre = ?, blog_text = ?, blog_date = ?, blog_images = ? WHERE blog_id = ?",
       [blog.blog_titre, blog.blog_text, blog.blog_date, blog.blog_image, blog.blog_id],
       (err, res) => {
         if (err) {
@@ -77,7 +94,7 @@ require("dotenv").config();
   };
 
   Blog.deleteBlog = (id, result) => {
-    sql.query("DELETE FROM blogs WHERE blog_id = ?", id, (err, res) => {
+    db.query("DELETE FROM blogs WHERE blog_id = ?", id, (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(null, err);
