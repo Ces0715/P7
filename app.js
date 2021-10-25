@@ -1,8 +1,7 @@
 const express = require('express');
-const app = express();
+
 const helmet = require('helmet');
 const path = require('path');
-const router = express.Router();
 //const auth = require("./middleware/auth");
 const db = require("./middleware/dbconnect");
 
@@ -17,6 +16,8 @@ db.query('SELECT * FROM users', (err, rows) => {
   console.log(rows);
 });
 
+const app = express();
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -30,20 +31,20 @@ app.use((_req, res, next) => {
   next();
 });
 app.use('/images', express.static(path.join(__dirname, 'images')));
-
+/*
 app.get("/", (_req, res) => {
   res.json({ message: "API  groupomania " });
 });
 app.post("/", (_req, res) => {
   res.json({ message: "API  groupomania poste " });
 });
-
+*/
 const blogRoutes = require('./routes/blog');
 app.use('/api/blogs', blogRoutes);
 //const userRoutes = require('./routes/user');
 //app.use('/api/user', userRoutes);
 
-module.exports = router;
+module.exports = app;
 
 
 

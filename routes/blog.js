@@ -6,11 +6,11 @@ const BlogCtrl = require('../controllers/blog');
 //const db = require("../middleware/dbconnect");
 
 
-//router.post('/blogs',BlogCtrl.createBlog);
-//router.get('/blogs',BlogCtrl.getAllBlog);
-//router.get('/blogs/:id', BlogCtrl.getOneBlog);
-//router.put('/blogs/:id', BlogCtrl.modifyOneBlog);
-//router.delete('/blogs/:id', BlogCtrl.deleteBlog);
+router.post('/blogs',BlogCtrl.createBlog);
+router.get('/',BlogCtrl.getAllBlog);
+router.get('/blogs/:id', BlogCtrl.getOneBlog);
+router.put('/blogs/:id', BlogCtrl.modifyOneBlog);
+router.delete('/blogs/:id', BlogCtrl.deleteBlog);
 
 
  /*

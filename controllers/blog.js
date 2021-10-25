@@ -1,9 +1,83 @@
 // recuperer le modele blog
+'use strict';
 const Blog = require('../models/blog');
 // recuperer modele file system pour les images
-const fs = require('fs');
-//const db = require("../middleware/dbconnect");
+//const fs = require('fs');
+const db = require("../middleware/dbconnect");
 
+exports.getAllBlog = function (_req, res)  {
+  Blog.getAllBlog(function (err, data)  {
+    console.log('controller');
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving customers."
+      });
+    else res.send(data);
+  });
+}
+
+exports.getAllBlog = (_req, res) => {
+  Blog.getAllBlog((err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving customers."
+      });
+    else res.send(data);
+  });
+}
+ 
+exports.createBlog = (req, res) => {
+  let blog = req.body.blog;
+  if (!blog) {
+    return res.status(400).send({ error: true, message: 'Ajouter nouveau blog' });
+  }
+  db.query("INSERT INTO blogs SET ? ", { blog: blog }, function (error, results, fields) {
+    if (error)
+      throw error;
+    return res.send({ error: false, data: results, message: 'blog crée.' });
+  });
+}
+ 
+exports.getOneBlog = function (req, res) {
+  let blog_id = req.params.blog_id;
+  if (!blog_id) {
+    return res.status(400).send({ error: true, message: ' blog_id non recupéré' });
+  }
+  db.query('SELECT * FROM blogs where blog_id=?', blog_id, function (error, results, fields) {
+    if (error) throw error;
+    return res.send({ error: false, data: results[0], message: 'blogs list.' });
+  });
+}
+ 
+exports.modifyOneBlog = function (req, res) {
+  let blog_id = req.body.blog_id;
+  let blog = req.body.blog;
+  if (!blog_id || !blog) {
+    return res.status(400).send({ error: user, message: 'Ajouter user et user_id' });
+  }
+  db.query("UPDATE blogs SET blog = ? WHERE blog_id = ?", [blog, blog_id], function (error, results, fields) {
+    if (error) throw error;
+    return res.send({ error: false, data: results, message: 'Blog modifié.' });
+  });
+}
+ 
+exports.deleteBlog = function (req, res) {
+  let blog_id = req.body.blog_id;
+  if (!blog_id) {
+    return res.status(400).send({ error: true, message: 'Supprimer blog_id' });
+  }
+  db.query('DELETE FROM blogs WHERE blog_id = ?', [blog_id], function (error, results, fields) {
+    if (error) throw error;
+    return res.send({ error: false, data: results, message: 'blog supprimé.' });
+  });
+}
+
+module.exports = Blog;
+;
+
+/*
 exports.create = (req, res) => {
   // Validate request
   if (!req.body) {
@@ -11,17 +85,7 @@ exports.create = (req, res) => {
       message: "Remplir blog!"
     });
   }
-/*
-  // Create a Customer
-  const blog = new Blog({
-    blog_id = blog.blog_id,
-    bloguser_id = blog.bloguser_id,
-    blog_titre = blog.blog_titre,
-    blog_text = blog.blog_text,
-    blog_date = blog.blog_date,
-    blog_image = blog.blog_image,
-  });
-*/
+
   // Enregistrer blog dans db
   Blog.create(blog, (err, data) => {
     if (err)
@@ -45,15 +109,15 @@ exports.findAll = (_req, res) => {
 };
 
 exports.findOne = (req, res) => {
-  Blog.getOneBlog(req.params.blogId, (err, data) => {
+  Blog.getOneBlog(req.params.blog_id, (err, data) => {
     if (err) {
       if (err.kind === "non trouvé") {
         res.status(404).send({
-          message: `Non trouvé avec id ${req.params.customerId}.`
+          message: `Non trouvé avec id ${req.params.blog_id}.`
         });
       } else {
         res.status(500).send({
-          message: "Erreur " + req.params.customerId
+          message: "Erreur " + req.params.blog_id
         });
       }
     } else res.send(data);
@@ -61,10 +125,9 @@ exports.findOne = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  // Validate Request
   if (!req.body) {
     res.status(400).send({
-      message: "Content can not be empty!"
+      message: "modifier!"
     });
   }
 
@@ -101,64 +164,4 @@ exports.delete = (req, res) => {
     } else res.send({ message: `Blog was deleted successfully!` });
   });
 };
-
-
-/*
-exports.getAllBlog = (_req, res) => {
-  res.send('hello');
-  db.query('SELECT * FROM blogs', (error, results, _fields) => {
-    if (error)
-      throw error;
-    return res.send({ data: results, message: 'blog list.' });
-  });
-}
- 
-exports.createBlog = (req, res) => {
-  let blog = req.body.blog;
-  if (!blog) {
-    return res.status(400).send({ error: true, message: 'Ajouter nouveau blog' });
-  }
-  db.query("INSERT INTO blogs SET ? ", { blog: blog }, function (error, results, fields) {
-    if (error)
-      throw error;
-    return res.send({ error: false, data: results, message: 'blog crée.' });
-  });
-}
- 
-exports.getOneBlog = function (req, res) {
-  let blog_id = req.params.blog_id;
-  if (!blog_id) {
-    return res.status(400).send({ error: true, message: ' blog_id non recupéré' });
-  }
-  db.query('SELECT * FROM blogs where id=?', blog_id, function (error, results, fields) {
-    if (error) throw error;
-    return res.send({ error: false, data: results[0], message: 'blogs list.' });
-  });
-}
- 
-exports.modifyOneBlog = function (req, res) {
-  let blog_id = req.body.blog_id;
-  let blog = req.body.blog;
-  if (!blog_id || !blog) {
-    return res.status(400).send({ error: user, message: 'Ajouter user et user_id' });
-  }
-  db.query("UPDATE blogs SET blog = ? WHERE id = ?", [blog, blog_id], function (error, results, fields) {
-    if (error) throw error;
-    return res.send({ error: false, data: results, message: 'Blog modifié.' });
-  });
-}
- 
-exports.deleteBlog = function (req, res) {
-  let blog_id = req.body.blog_id;
-  if (!blog_id) {
-    return res.status(400).send({ error: true, message: 'Supprimer blog_id' });
-  }
-  db.query('DELETE FROM blogs WHERE id = ?', [blog_id], function (error, results, fields) {
-    if (error) throw error;
-    return res.send({ error: false, data: results, message: 'blog supprimé.' });
-  });
-}
 */
-module.exports = Blog;
-
-;

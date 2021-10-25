@@ -19,11 +19,11 @@ require("dotenv").config();
     //db.query("SELECT blogs.blog_id, blogs.bloguser_id, blogs.blog_titre, blogs.blog_text, blogs.blog_date, blogs.blog.blog_image FROM blogs INNER JOIN users ON blogs.userblog_id = users.user_id ORDER BY blogs.blog_id DESC", 
       if (err) {
         console.log("erreur:", err);
-        result(null, err);
+        //result(null, err);
         return;
       }
       console.log("blogs:", res);
-      result(null, res);
+      //result(null, res);
     });
   };
 
