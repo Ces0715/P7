@@ -7,6 +7,18 @@ const validator = require("email-validator");
 require("dotenv").config();
 const db = require("../middleware/dbconnect");
 
+exports.getAllUser = function (_req, res,next) {
+  User.getAll((err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Erreur pour trouver les users."
+      });
+    else res.send(data);
+  });
+
+}
+
 
 //fonction pour créer un user
 exports.createUser = function(req,res){
@@ -37,6 +49,10 @@ exports.createUser = function(req,res){
 });
 }
 
+
+
+/*
+
 //fonction pour récuperer tous les users
 exports.getAllUsers = function (req, res) {
   let user = req.body.user;
@@ -48,8 +64,6 @@ if (error) throw error;
   return res.send({ error: false, data: results, message: 'User crée.' });
   });
 }
-
-/*
 exports.signup = (req, res, _next) => {
   const isValidateEmail = validator.validate(req.body.email)
   if (!isValidateEmail) {
@@ -163,5 +177,5 @@ exports.getAllUsers = (req, res, next) => {
    */
 
 
-module.exports = User;
+//module.exports = User;
 }; 

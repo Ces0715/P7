@@ -1,4 +1,6 @@
-const sql = require("../middleware/dbconnect");
+const db = require("../middleware/dbconnect");
+require("dotenv").config();
+'use strict';
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -11,12 +13,25 @@ const jwt = require("jsonwebtoken");
     this.user_mail = user.user_mail;
     this.user_mp = user.user_mp;
   };
-  console.log(User);
+
+
+  User.getAll = function (result) {
+    db.query("SELECT * FROM users", (err,res)=> {
+        if (err) {
+          console.log("erreur:", err);
+          result(null,err);
+          return;
+        }
+          
+        console.log("users:",res);
+        result(null,res);
+      });
+  };
   
 //fonction pour créer un nouveau compte
   User.signup = (newUser, result) => {
     // mettre info dans la table users
-    sql.query("INSERT INTO users SET ?", newUser, (err, res) => {
+    db.query("INSERT INTO users SET ?", newUser, (err, res) => {
       if (err) {
         console.log("erreur:", err);
         result(err, null);
@@ -30,7 +45,7 @@ const jwt = require("jsonwebtoken");
   //fonction pour créer login du compte
   User.login = (user_mail, user_mp, result) => {
     // recuperer infos du user qui a un mail
-    sql.query(`SELECT * FROM users WHERE user_mail = ?`,user_mail, (err, res) => {
+    db.query(`SELECT * FROM users WHERE user_mail = ?`,user_mail, (err, res) => {
        //si email dans bd
        if (res.length > 0) {
         //comparer le mp avec celui de la bd
@@ -59,8 +74,8 @@ const jwt = require("jsonwebtoken");
 
 
 //fonction pour récuperer tous les users
-  User.getAllUsers =  function (result) {
-    sql.query("SELECT * FROM users", (err, res) => {
+  /*User.getAllUsers =  function (result) {
+    db.query("SELECT * FROM users", (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(null, err);
@@ -70,11 +85,14 @@ const jwt = require("jsonwebtoken");
       result(null, res);
     });
   };
+  */
+  
+
 
   //fonction pour recuperer un user
   User.getOne = (userId, result) => {
     //retrieves infos for the user whse id is provided
-    sql.query(`SELECT user_id, user_nom, user_prenom, user_login, user_mp, user_mail FROM users WHERE id = ${userId}`, (err, res) => {
+    db.query(`SELECT user_id, user_nom, user_prenom, user_login, user_mp, user_mail FROM users WHERE id = ${userId}`, (err, res) => {
         if (err) {
             console.log("erreur: ", err);
             result(err, null);
