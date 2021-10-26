@@ -1,4 +1,5 @@
 //importer mysql pour utiliser la base de données
+'use strict';
 const mysql = require('mysql');
 require("dotenv").config();
 

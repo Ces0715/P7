@@ -1,48 +1,31 @@
 const db = require("../middleware/dbconnect");
-//const sql = require("./db");
 require("dotenv").config();
 'use strict';
-//constructeur
+
+//constructeur du modele Blog
   const Blog = function(blog) {
     this.blog_id = blog.blog_id;
     this.bloguser_id = blog.bloguser_id;
     this.blog_titre = blog.blog_titre;
     this.blog_text = blog.blog_text;
     this.blog_date = blog.blog_date;
-    this.blog_image = blog.blog_image;
-    
+    this.blog_image = blog.blog_image; 
   };
   
-  //fonction pour récuperer infos tous les blogs
-  Blog.getAllBlog = function (result)  {
-    db.query("SELECT * FROM blogs",function (err, res)  {
-      //selectionner infos et joindre les 2 tables  
-    //db.query("SELECT blogs.blog_id, blogs.bloguser_id, blogs.blog_titre, blogs.blog_text, blogs.blog_date, blogs.blog.blog_image FROM blogs INNER JOIN users ON blogs.userblog_id = users.user_id ORDER BY blogs.blog_id DESC", 
-      if (err) {
-        console.log("erreur:", err);
-        //result(null, err);
-        //return;
-      }
-      else{
-        console.log("blogs:", res);
-        //result(null, res);
-      }
-      
-    });
-  };
-/*
-  Blog.getAllBlog = function (result) {
-    let sql = 'SELECT * FROM blogs';
-    db.query(sql, function (err, rows, _fields) {
-        console.log("error: ", err);
-        if (err)
-          result(err, null);
-
-        console.log(rows);
-        result(null, rows);
+// fonction pour recuperer les blogs
+  Blog.getAll = function (result) {
+    db.query("SELECT * FROM blogs", (err,res)=> {
+        if (err) {
+          console.log("erreur:", err);
+          result(null,err);
+          return;
+        }
+          
+        console.log("blogs:",res);
+        result(null,res);
       });
   };
-*/
+
 
   //fonction pour créer un blog
   Blog.createBlog = (newBlog, result) => {

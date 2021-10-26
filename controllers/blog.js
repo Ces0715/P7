@@ -5,23 +5,17 @@ const Blog = require('../models/blog');
 //const fs = require('fs');
 const db = require("../middleware/dbconnect");
 
-exports.getAllBlog = function (_req, res) {
-  db.query('SELECT * FROM blogs', function (error, results, _fields) {
-      if (error) throw error;
-      return res.send({ data: results, message: 'blog list.' });
+exports.getAllBlog = function (_req, res,next) {
+  Blog.getAll((err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Erreur pour trouver les blogs."
+      });
+    else res.send(data);
   });
-}
 
-/*
-exports.getAllBlog = function (_req, res) {
-  Blog.getAllBlog( function (err, blogs) {
-    if (err) return res.status(500).send('Error occured during fetching items');
-		console.log('items: ', blogs);
-		
-		return res.send(blogs);
-	});
-};
-*/
+}
 
 exports.createBlog = (req, res) => {
   let blog = req.body.blog;
@@ -69,7 +63,7 @@ exports.deleteBlog = function (req, res) {
   });
 }
 
-module.exports = Blog;
+//module.exports = Blog;
 ;
 
 /*
