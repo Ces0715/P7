@@ -5,11 +5,16 @@ const Blog = require('../models/blog');
 //const fs = require('fs');
 const db = require("../middleware/dbconnect");
 
-exports.getAllBlog = function (_req, res) {
-  db.query('SELECT * FROM blogs', function (error, results, _fields) {
-      if (error) throw error;
-      return res.send({ data: results, message: 'blog list.' });
+exports.getAllBlog = function (_req, res,next) {
+  Blog.getAll((err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving customers."
+      });
+    else res.send(data);
   });
+
 }
 
 /*
@@ -69,7 +74,7 @@ exports.deleteBlog = function (req, res) {
   });
 }
 
-module.exports = Blog;
+//module.exports = Blog;
 ;
 
 /*
