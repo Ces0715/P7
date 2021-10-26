@@ -4,6 +4,7 @@ const path = require('path');
 //const auth = require("./middleware/auth");
 const db = require("./middleware/dbconnect");
 
+/*
 db.query('SELECT * FROM blogs', (err, rows) => {
   if (err) throw err;
   console.log('Données récupérées');
@@ -14,7 +15,7 @@ db.query('SELECT * FROM users', (err, rows) => {
   console.log('Users récupérés');
   console.log(rows);
 });
-
+*/
 const app = express();
 
 app.use((req, res, next) => {
@@ -105,7 +106,7 @@ app.get('/blogs/:id', function (req, res) {
   });
 });
 */
-
+/*
 app.get('/users', function (_req, res) {
   db.query('SELECT * FROM users', function (error, results, _fields) {
       if (error) throw error;
@@ -163,6 +164,7 @@ app.put('/users', function (req, res) {
   }); 
 
  
+*/
 
 
-
+ 

@@ -14,20 +14,16 @@ require("dotenv").config();
   };
   
   //fonction pour récuperer infos tous les blogs
-  Blog.getAllBlog = function (result)  {
-    db.query("SELECT * FROM blogs",function (err, res)  {
-      //selectionner infos et joindre les 2 tables  
-    //db.query("SELECT blogs.blog_id, blogs.bloguser_id, blogs.blog_titre, blogs.blog_text, blogs.blog_date, blogs.blog.blog_image FROM blogs INNER JOIN users ON blogs.userblog_id = users.user_id ORDER BY blogs.blog_id DESC", 
+  Blog.getAll = function (result)  {
+    db.query("SELECT * FROM blogs", (err, res) => {
       if (err) {
-        console.log("erreur:", err);
-        //result(null, err);
-        //return;
+        console.log("error: ", err);
+        result(null, err);
+        return;
       }
-      else{
-        console.log("blogs:", res);
-        //result(null, res);
-      }
-      
+  
+      console.log("customers: ", res);
+      result(null, res);
     });
   };
 /*
