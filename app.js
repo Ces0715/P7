@@ -30,14 +30,7 @@ app.use((_req, res, next) => {
   next();
 });
 app.use('/images', express.static(path.join(__dirname, 'images')));
-/*
-app.get("/", (_req, res) => {
-  res.json({ message: "API  groupomania " });
-});
-app.post("/", (_req, res) => {
-  res.json({ message: "API  groupomania poste " });
-});
-*/
+
 const blogRoutes = require('./routes/blog');
 app.use('/api/blogs', blogRoutes);
 //const userRoutes = require('./routes/user');

@@ -19,28 +19,13 @@ require("dotenv").config();
           console.log("erreur:", err);
           result(null,err);
           return;
-        }
-          
+        }         
         console.log("blogs:",res);
         result(null,res);
       });
   };
 
-
-  //fonction pour créer un blog
-  Blog.createBlog = (newBlog, result) => {
-    db.query("INSERT INTO blogs SET ?", newBlog, (err, res) => {
-      if (err) {
-        console.log("erreur: ", err);
-        result(err, null);
-        return;
-      }
-      console.log("created blog: ", { id: res.insertId, ...newBlog });
-      result(null, { id: res.insertId, ...newBlog });
-    });
-  };
-
-  Blog.getOneBlog = (BlogId, result) => {
+  Blog.findById = (BlogId, result) => {
     db.query(`SELECT * FROM blogs WHERE blog_id = ${BlogId}`, (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -57,8 +42,21 @@ require("dotenv").config();
     });
   }; 
 
-  Blog.modifyOneBlog = (id, blog, result) => {
-    db.query("UPDATE blogs SET blog_titre = ?, blog_text = ?, blog_date = ?, blog_images = ? WHERE blog_id = ?",
+//fonction pour créer un blog
+Blog.createBlog = (newBlog, result) => {
+  db.query("INSERT INTO blogs SET ?", newBlog, (err, res) => {
+    if (err) {
+      console.log("erreur: ", err);
+      result(err, null);
+      return;
+    }
+    console.log("created blog: ", { id: res.insertId, ...newBlog });
+    result(null, { id: res.insertId, ...newBlog });
+  });
+};
+
+  Blog.updateById = (id, blog, result) => {
+    db.query("UPDATE blogs SET blog_titre = ?, blog_text = ?, blog_date = ?, blog_image = ? WHERE blog_id = ?",
       [blog.blog_titre, blog.blog_text, blog.blog_date, blog.blog_image, blog.blog_id],
       (err, res) => {
         if (err) {
@@ -76,7 +74,7 @@ require("dotenv").config();
       });
   };
 
-  Blog.deleteBlog = (id, result) => {
+  Blog.remove = (id, result) => {
     db.query("DELETE FROM blogs WHERE blog_id = ?", id, (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -93,17 +91,6 @@ require("dotenv").config();
     });
   };
 
-  module.exports = Blog;
-
-
-
-
-
-
-
-
-
-  /*
   Blog.removeAll = result => {
     sql.query("DELETE FROM blogs", (err, res) => {
       if (err) {
@@ -115,7 +102,7 @@ require("dotenv").config();
       result(null, res);
     });
   };
- */
-  
+ 
+  module.exports = Blog;
  
   
