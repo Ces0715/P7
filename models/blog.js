@@ -4,6 +4,7 @@ require("dotenv").config();
 
 //constructeur du modele Blog
   const Blog = function(blog) {
+    //this.blog_id = blog.blog_id;
     this.blog_id = blog.blog_id;
     this.bloguser_id = blog.bloguser_id;
     this.blog_titre = blog.blog_titre;
@@ -12,36 +13,6 @@ require("dotenv").config();
     this.blog_image = blog.blog_image; 
   };
   
-// fonction pour recuperer les blogs
-  Blog.getAll = function (result) {
-    db.query("SELECT * FROM blogs", (err,res)=> {
-        if (err) {
-          console.log("erreur:", err);
-          result(null,err);
-          return;
-        }         
-        console.log("blogs:",res);
-        result(null,res);
-      });
-  };
-
-  Blog.findById = (BlogId, result) => {
-    db.query(`SELECT * FROM blogs WHERE blog_id = ${BlogId}`, (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      }
-      if (res.length) {
-        console.log("blog ok: ", res[0]);
-        result(null, res[0]);
-        return;
-      }
-      // not found Blog with the id
-      result({ kind: "non trouvé" }, null);
-    });
-  }; 
-
 //fonction pour créer un blog
 Blog.createBlog = (newBlog, result) => {
   db.query("INSERT INTO blogs SET ?", newBlog, (err, res) => {
@@ -54,6 +25,36 @@ Blog.createBlog = (newBlog, result) => {
     result(null, { id: res.insertId, ...newBlog });
   });
 };
+
+Blog.findById = (BlogId, result) => {
+  db.query(`SELECT * FROM blogs WHERE blog_id = ${BlogId}`, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+    if (res.length) {
+      console.log("blog ok: ", res[0]);
+      result(null, res[0]);
+      return;
+    }
+    // not found Blog with the id
+    result({ kind: "non trouvé" }, null);
+  });
+}; 
+
+// fonction pour recuperer les blogs
+  Blog.getAll = function (result) {
+    db.query("SELECT * FROM blogs", (err,res)=> {
+        if (err) {
+          console.log("erreur:", err);
+          result(null,err);
+          return;
+        }         
+        console.log("blogs:",res);
+        result(null,res);
+      });
+  };
 
   Blog.updateById = (id, blog, result) => {
     db.query("UPDATE blogs SET blog_titre = ?, blog_text = ?, blog_date = ?, blog_image = ? WHERE blog_id = ?",

@@ -7,21 +7,87 @@ const validator = require("email-validator");
 require("dotenv").config();
 const db = require("../middleware/dbconnect");
 
-exports.getAllUser = function (_req, res,next) {
-  User.getAll((err, data) => {
-    if (err)
-      res.status(500).send({
-        message:
-          err.message || "Erreur pour trouver les users."
-      });
-    else res.send(data);
+exports.getAllUser =  function (_req, res) {
+  db.query('SELECT * FROM users', function (error, results, _fields) {
+      if (error) throw error;
+      return res.send({ data: results, message: 'user list.' });
   });
+};
 
+
+//fonction pour recuperer un user
+exports.getOneUser = (user_id, result) => {
+  db.query(`SELECT user_id, user_nom, user_prenom, user_login, user_mp, user_mail FROM users WHERE id = ${user_id}`, (err, res) => {
+      if (err) {
+          console.log("erreur: ", err);
+          result(err, null);
+          return;
+      } else if (res.length) {
+          result(null, res[0]);
+          return;
+      }
+  });
+};
+
+exports.signUp = (req, res, next) => {
+  bcrypt.hash(req.body.password, 10)
+  .then(hash => {
+      const user = new db.User({
+        user_id: req.body.user_id,
+        user_nom: req.body.user_nom,
+        user_prenom: req.body.user_prenom,
+        user_login:req.body.user_login,
+        user_mail: req.body.user_mail,
+        user_mp: hash,   
+      });
+      user.save()
+      .then(() => res.status(201).json({message: 'Utilisateur créé'}))
+      .catch(error => res.status(400).json({ error }));
+  })
+  .catch(error => res.status(500).json({ error }));
+};
+
+
+exports.login = (req, res, next) => {
+  User.findOne({ 
+      where: {
+          user_mail: req.body.user_mail} })
+      .then(user => {
+          if(!user) {
+              return res.status(401).json({ error: 'Utilisateur non trouvé!' })
+          }
+          console.log(req.body.user_mp);
+          console.log(user.user_mp);
+          bcrypt.compare(req.body.user_mp, user.user_mp)
+          .then( valid => {
+              if (!valid) {
+                  return res.status(401).json({ error: 'Mot de passe incorrect!' }) 
+              }
+              console.log(user, 'user when log in')
+              res.status(200).json({
+                  id: user.id,
+                  uuid: user.uuid,
+                  token: jwt.sign(
+                      //payload
+                      { userId: user.uuid },
+                      'RANDOM_TOKEN_SECRET',
+                      { expiresIn:'24h' }
+                  ),
+                  email: user.email,
+                  first_name: user.first_name,
+                  last_name: user.last_name,
+                  is_admin: user.is_admin
+              });
+          })
+          .catch(error => res.status(500).json({ error: 2 + error.toString() }))
+      })
+      .catch(error => res.status(500).json({ error: 1 + error.toString() }));
 }
 
 
+
 //fonction pour créer un user
-exports.createUser = function(req,res){
+exports.signUp = function(req,res){
   const isValidateEmail = validator.validate(req.body.user_mail)
   if (!isValidateEmail) {
     res.setHeader('Content-Type', 'application/json');
@@ -51,19 +117,12 @@ exports.createUser = function(req,res){
 
 
 
-/*
 
-//fonction pour récuperer tous les users
-exports.getAllUsers = function (req, res) {
-  let user = req.body.user;
-  if (!user) {
-    return res.status(400).send({ error:true, message: 'Ajouter nouvel user' });
-  }
- db.query("INSERT INTO users SET ? ", { user: user }, function (error, results, fields) {
-if (error) throw error;
-  return res.send({ error: false, data: results, message: 'User crée.' });
-  });
-}
+
+
+
+
+/*
 exports.signup = (req, res, _next) => {
   const isValidateEmail = validator.validate(req.body.email)
   if (!isValidateEmail) {
@@ -141,12 +200,7 @@ exports.signup = (req, res, _next) => {
     });
   };
 
-  exports.getAllUsers = function (_req, res) {
-    db.query('SELECT * FROM users', function (error, results, _fields) {
-        if (error) throw error;
-        return res.send({ data: results, message: 'user list.' });
-    });
-  }
+  
 
   /*
   //Fonction qui gère la logique métier de la route GET (affichage des données d'un user)
@@ -173,9 +227,29 @@ exports.getAllUsers = (req, res, next) => {
     });
   };
 
-  
-   */
+/*
+//fonction pour récuperer tous les users
+exports.getAllUser = function (req, res) {
+  let user = req.body.user;
+  if (!user) {
+    return res.status(400).send({ error:true, message: 'Ajouter nouvel user' });
+  }
+ db.query("INSERT INTO users SET ? ", { user: user }, function (error, results, fields) {
+if (error) throw error;
+  return res.send({ error: false, data: results, message: 'User crée.' });
+  });
+}
 
+exports.getAllUser = function (_req, res,next) {
+  User.getAll((err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Erreur pour trouver les users."
+      });
+    else res.send(data);
+  });
+}
+*/
 
-//module.exports = User;
-}; 
+; }

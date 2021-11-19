@@ -14,6 +14,7 @@ const jwt = require("jsonwebtoken");
     this.user_mp = user.user_mp;
   };
 
+  module.exports = User;
 
   User.getAll = function (result) {
     db.query("SELECT * FROM users", (err,res)=> {
@@ -21,12 +22,12 @@ const jwt = require("jsonwebtoken");
           console.log("erreur:", err);
           result(null,err);
           return;
-        }
-          
+        }  
         console.log("users:",res);
         result(null,res);
       });
   };
+
   
 //fonction pour créer un nouveau compte
   User.signup = (newUser, result) => {
@@ -71,23 +72,6 @@ const jwt = require("jsonwebtoken");
         return;
     }
 });
-
-
-//fonction pour récuperer tous les users
-  /*User.getAllUsers =  function (result) {
-    db.query("SELECT * FROM users", (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(null, err);
-        return;
-      }
-      console.log("user: ", res);
-      result(null, res);
-    });
-  };
-  */
-  
-
 
   //fonction pour recuperer un user
   User.getOne = (userId, result) => {

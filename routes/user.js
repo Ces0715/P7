@@ -3,11 +3,19 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const UserCtrl = require('../controllers/user');
 
-router.post('/signup', UserCtrl.signup);
+router.post('/signup', UserCtrl.signUp);
 router.post('/login', UserCtrl.login);
-router.get('/api/users', UserCtrl.getAllUser);
+router.get('/', UserCtrl.getAllUser);
+router.get('/:id', auth, UserCtrl.getOneUser);
+//router.put('/:id', auth, UserCtrl.modifyOneUser);
+//router.delete('/:id', auth, UserCtrl.deleteUser);
 
 module.exports = router;
+
+
+
+
+
 
 /*
 // Ajout nouvel user 
@@ -21,8 +29,4 @@ router.post('/api/users', function (req, res) {
     return res.send({ error: false, data: results, message: 'User crée.' });
     });
   });
-
-router.get('/:id', auth, users.getOneBlog);
-router.put('/:id', auth, users.modifyOneBlog);
-router.delete('/:id', auth, users.deleteBlog);
 */

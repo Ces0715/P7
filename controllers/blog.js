@@ -16,7 +16,7 @@ exports.getAllBlog = function (_req, res,next) {
   });
 }
 
-exports.findOne = (req, res) => {
+exports.findOneBlog = (req, res) => {
   Blog.findById(req.params.id, (err, data) => {
     if (err) {
       if (err.kind === "non trouvé") {
@@ -32,7 +32,7 @@ exports.findOne = (req, res) => {
   });
 };
 
-exports.update = (req, res) => {
+exports.updateBlog = (req, res) => {
   if (!req.body) {
     res.status(400).send({
       message: "modifier!"
@@ -56,45 +56,39 @@ exports.update = (req, res) => {
   );
 };
 
-exports.create = (req, res) => {
+exports.createBlog = (req, res) => {
   // Validate request
   if (!req.body) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
-  }
-/*
-  // Create a Customer
-  const blog = new Blog({
-    email: req.body.email,
-    name: req.body.name,
-    active: req.body.active
-  });
+  } else {
 
-  // Save Customer in the database
-  Blog.create(blog, (err, data) => {
+    // Create a Customer
+  const blog = new Blog({
+    //blog_id = req.body.blog_id;
+    bloguser_id : req.body.bloguser_id,
+    blog_titre : req.body.titre,
+    blog_text : req.body.text,
+    blog_date : req.body.date,
+    blog_image : req.body.image, 
+  });
+  console.log(blog);
+
+    // Save Customer in the database
+  Blog.createBlog(blog, (err, data) => {
     if (err)
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Customer."
+          err.message || "Erreur dans la création d'un blog."
       });
-    else res.send(data);
+    else res.status(201).send({
+      message: "blog cree!",
+      blog:data,
+    });
   });
- */ 
-};
-
-
- 
-exports.deleteBlog = function (req, res) {
-  let blog_id = req.body.blog_id;
-  if (!blog_id) {
-    return res.status(400).send({ error: true, message: 'Supprimer blog_id' });
   }
-  db.query('DELETE FROM blogs WHERE blog_id = ?', [blog_id], function (error, results, fields) {
-    if (error) throw error;
-    return res.send({ error: false, data: results, message: 'blog supprimé.' });
-  });
-}
+};
 
 exports.delete = (req, res) => {
   Blog.remove (req.params.blogId, (err, data) => {
@@ -122,3 +116,19 @@ exports.deleteAll = (req, res) => {
     else res.send({ message: `All Customers were deleted successfully!` });
   });
 };
+
+exports.deleteBlog = function (req, res) {
+  let blog_id = req.body.blog_id;
+  if (!blog_id) {
+    return res.status(400).send({ error: true, message: 'Supprimer blog_id' });
+  }
+  db.query('DELETE FROM blogs WHERE blog_id = ?', [blog_id], function (error, results, fields) {
+    if (error) throw error;
+    return res.send({ error: false, data: results, message: 'blog supprimé.' });
+  });
+}
+
+
+
+
+

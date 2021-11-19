@@ -3,18 +3,6 @@ const helmet = require('helmet');
 const path = require('path');
 //const auth = require("./middleware/auth");
 const db = require("./middleware/dbconnect");
-/*
-db.query('SELECT * FROM blogs', (err, rows) => {
-  if (err) throw err;
-  console.log('Données récupérées');
-  console.log(rows);
-});
-db.query('SELECT * FROM users', (err, rows) => {
-  if (err) throw err;
-  console.log('Users récupérés');
-  console.log(rows);
-});
-*/
 const app = express();
 
 app.use((req, res, next) => {
@@ -33,10 +21,76 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 const blogRoutes = require('./routes/blog');
 app.use('/api/blogs', blogRoutes);
-//const userRoutes = require('./routes/user');
-//app.use('/api/users', userRoutes);
+
+const userRoutes = require('./routes/user');
+app.use('/api/users', userRoutes);
 
 module.exports = app;
+
+
+/*
+app.get('/users', function (_req, res) {
+  db.query('SELECT * FROM users', function (error, results, _fields) {
+      if (error) throw error;
+      return res.send({ data: results, message: 'user list.' });
+  });
+});
+
+// Recuperation user avec id 
+app.get('/users/:id', function (req, res) {
+  let user_id = req.params.id;
+  if (!user_id) {
+   return res.status(400).send({ error: true, message: 'Please provide user_id' });
+  }
+  db.query('SELECT * FROM users where id=?', user_id, function (error, results, fields) {
+   if (error) throw error;
+    return res.send({ error: false, data: results[0], message: 'users list.' });
+  });
+});
+
+// Ajout nouvel user 
+app.post('/users', function (req, res) {
+  let user = req.body.user;
+  if (!user) {
+    return res.status(400).send({ error:true, message: 'Ajouter nouvel user' });
+  }
+ db.query("INSERT INTO users SET ? ", { user: user }, function (error, results, fields) {
+if (error) throw error;
+  return res.send({ error: false, data: results, message: 'User crée.' });
+  });
+});
+
+//  Modifier user avec id
+app.put('/users', function (req, res) {
+  let user_id = req.body.user_id;
+  let user = req.body.user;
+  if (!user_id || !user) {
+    return res.status(400).send({ error: user, message: 'Ajouter user et user_id' });
+  }
+  db.query("UPDATE users SET user = ? WHERE id = ?", [user, user_id], function (error, results, fields) {
+    if (error) throw error;
+    return res.send({ error: false, data: results, message: 'User modifié.' });
+   });
+  });
+
+  //  Supprimer user
+ app.delete('/users', function (req, res) {
+  let user_id = req.body.user_id;
+  if (!user_id) {
+      return res.status(400).send({ error: true, message: 'Supprimer user_id' });
+  }
+  db.query('DELETE FROM users WHERE id = ?', [user_id], function (error, results, fields) {
+      if (error) throw error;
+      return res.send({ error: false, data: results, message: 'User supprimé.' });
+  });
+  }); 
+
+
+
+
+
+
+
 
 
 
@@ -97,66 +151,17 @@ app.get('/blogs/:id', function (req, res) {
     return res.send({ error: false, data: results[0], message: 'blogs list.' });
   });
 });
+
+
+db.query('SELECT * FROM blogs', (err, rows) => {
+  if (err) throw err;
+  console.log('Données récupérées');
+  console.log(rows);
+});
+db.query('SELECT * FROM users', (err, rows) => {
+  if (err) throw err;
+  console.log('Users récupérés');
+  console.log(rows);
+});
 */
-
-/*
-app.get('/users', function (_req, res) {
-  db.query('SELECT * FROM users', function (error, results, _fields) {
-      if (error) throw error;
-      return res.send({ data: results, message: 'user list.' });
-  });
-});
-
-// Recuperation user avec id 
-app.get('/users/:id', function (req, res) {
-  let user_id = req.params.id;
-  if (!user_id) {
-   return res.status(400).send({ error: true, message: 'Please provide user_id' });
-  }
-  db.query('SELECT * FROM users where id=?', user_id, function (error, results, fields) {
-   if (error) throw error;
-    return res.send({ error: false, data: results[0], message: 'users list.' });
-  });
-});
-
-// Ajout nouvel user 
-app.post('/users', function (req, res) {
-  let user = req.body.user;
-  if (!user) {
-    return res.status(400).send({ error:true, message: 'Ajouter nouvel user' });
-  }
- db.query("INSERT INTO users SET ? ", { user: user }, function (error, results, fields) {
-if (error) throw error;
-  return res.send({ error: false, data: results, message: 'User crée.' });
-  });
-});
-
-//  Modifier user avec id
-app.put('/users', function (req, res) {
-  let user_id = req.body.user_id;
-  let user = req.body.user;
-  if (!user_id || !user) {
-    return res.status(400).send({ error: user, message: 'Ajouter user et user_id' });
-  }
-  db.query("UPDATE users SET user = ? WHERE id = ?", [user, user_id], function (error, results, fields) {
-    if (error) throw error;
-    return res.send({ error: false, data: results, message: 'User modifié.' });
-   });
-  });
-
-  //  Supprimer user
- app.delete('/users', function (req, res) {
-  let user_id = req.body.user_id;
-  if (!user_id) {
-      return res.status(400).send({ error: true, message: 'Supprimer user_id' });
-  }
-  db.query('DELETE FROM users WHERE id = ?', [user_id], function (error, results, fields) {
-      if (error) throw error;
-      return res.send({ error: false, data: results, message: 'User supprimé.' });
-  });
-  }); 
-
- */
-
-
 

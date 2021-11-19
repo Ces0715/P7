@@ -5,19 +5,14 @@ const BlogCtrl = require('../controllers/blog');
 //const multer = require('../middleware/multer-config');
 //const db = require("../middleware/dbconnect");
 
-router.post('/',BlogCtrl.create);
+router.post('/',BlogCtrl.createBlog);
 router.get('/',BlogCtrl.getAllBlog);
-router.get('/:id', BlogCtrl.findOne);
-router.put('/:id', BlogCtrl.update);
+router.get('/:id', BlogCtrl.findOneBlog);
+router.put('/:id', BlogCtrl.updateBlog);
 router.delete('/:id', BlogCtrl.delete);
 router.delete('/', BlogCtrl.deleteAll); 
-;
 
 module.exports = router;
-
-
-
-
 
 /*
 router.get('/', auth, blogs.getAllBlog);
