@@ -15,7 +15,7 @@ const jwt = require("jsonwebtoken");
   };
 
   module.exports = User;
-
+/*
   User.getAll = function (result) {
     db.query("SELECT * FROM users", (err,res)=> {
         if (err) {
@@ -74,21 +74,27 @@ const jwt = require("jsonwebtoken");
 });
 
   //fonction pour recuperer un user
-  User.getOne = (userId, result) => {
+  User.findById = (userId, result) => {
     //retrieves infos for the user whse id is provided
-    db.query(`SELECT user_id, user_nom, user_prenom, user_login, user_mp, user_mail FROM users WHERE id = ${userId}`, (err, res) => {
+    db.query(`SELECT * FROM users WHERE  user_id = ${userId}`, (err, res) => {
         if (err) {
             console.log("erreur: ", err);
             result(err, null);
             return;
-        } else if (res.length) {
-            result(null, res[0]);
-            return;
+        } 
+        if (res.length) {
+          console.log("user ok: ", res[0]);
+          result(null, res[0]);
+          return;
         }
-    });
+        // not found User with the id
+        result({ kind: "non trouvé" }, null);
+      });
+    }; 
+       
 };
 module.exports = User;
-}
+
  
 
 

@@ -14,6 +14,20 @@ exports.getAllUser =  function (_req, res) {
   });
 };
 
+exports.getOneUser =  (UserId,result) =>  {
+  db.query(`SELECT * FROM users WHERE user_id = ${UserId}`, (err, res) => {
+      if (err) {
+          console.log("erreur: ", err);
+          result(err, null);
+          return;
+      } else if (res.length) {
+          result(null, res[0]);
+          return;
+      }
+  });
+};
+
+/*
 
 //fonction pour recuperer un user
 exports.getOneUser = (user_id, result) => {
@@ -28,6 +42,29 @@ exports.getOneUser = (user_id, result) => {
       }
   });
 };
+
+
+
+exports.findOneUser = (req, res) => {
+  User.findById(req.params.id, (err, data) => {
+    if (err) {
+      if (err.kind === "non trouvé") {
+        res.status(404).send({
+          message: `Non trouvé avec id ${req.params.id}.`
+        });
+      } else {
+        res.status(500).send({
+          message: "Erreur " + req.params.id
+        });
+      }
+    } else res.send(data);
+  });
+};
+
+
+
+
+
 
 exports.signUp = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
@@ -252,4 +289,4 @@ exports.getAllUser = function (_req, res,next) {
 }
 */
 
-; }
+; 
