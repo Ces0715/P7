@@ -43,8 +43,6 @@ exports.getOneUser = (user_id, result) => {
   });
 };
 
-
-
 exports.findOneUser = (req, res) => {
   User.findById(req.params.id, (err, data) => {
     if (err) {

@@ -10,10 +10,10 @@ module.exports = (req, res, next) => {
     const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN, );
       
     // recuperer le user ID
-    const userId = decodedToken.user_id;
+    const userId = decodedToken.userId;
     //si user ID different
-    if (req.body.user_id && req.body.user_id !== userId) {
-      throw 'Invalid user ID';
+    if (req.body.userId && req.body.userId !== userId) {
+      throw 'Invalid userId';
     } else {
       next();
     }

@@ -26,6 +26,7 @@ Blog.createBlog = (newBlog, result) => {
   });
 };
 
+//fonction pour trouver un blog
 Blog.findById = (BlogId, result) => {
   db.query(`SELECT * FROM blogs WHERE blog_id = ${BlogId}`, (err, res) => {
     if (err) {
@@ -56,9 +57,11 @@ Blog.findById = (BlogId, result) => {
       });
   };
 
+
+  //fonction pour modifier un blog
   Blog.updateById = (id, blog, result) => {
-    db.query("UPDATE blogs SET blog_titre = ?, blog_text = ?, blog_date = ?, blog_image = ? WHERE blog_id = ?",
-      [blog.blog_titre, blog.blog_text, blog.blog_date, blog.blog_image, blog.blog_id],
+    db.query("UPDATE blogs SET blog_titre = ?, blog_text = ?, blog_date = ?, blog_image = ? WHERE id = ?",
+      [blog.blog_titre, blog.blog_text, blog.blog_date, blog.blog_image, id],
       (err, res) => {
         if (err) {
           console.log("erreur: ", err);
@@ -75,6 +78,8 @@ Blog.findById = (BlogId, result) => {
       });
   };
 
+
+  //fonction pour supprimer un blog
   Blog.remove = (id, result) => {
     db.query("DELETE FROM blogs WHERE blog_id = ?", id, (err, res) => {
       if (err) {
@@ -92,6 +97,8 @@ Blog.findById = (BlogId, result) => {
     });
   };
 
+
+  //fonction pour tout supprimer
   Blog.removeAll = result => {
     sql.query("DELETE FROM blogs", (err, res) => {
       if (err) {

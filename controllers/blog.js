@@ -19,7 +19,7 @@ exports.getAllBlog = function (_req, res,next) {
 exports.findOneBlog = (req, res) => {
   Blog.findById(req.params.id, (err, data) => {
     if (err) {
-      if (err.kind === "non trouvé") {
+      if (err.kind === "non trouvé") {c
         res.status(404).send({
           message: `Non trouvé avec id ${req.params.id}.`
         });
@@ -38,17 +38,20 @@ exports.updateBlog = (req, res) => {
       message: "modifier!"
     });
   }
+console.log(req.body);
+
   Blog.updateById (
-    req.params.blogId,new Blog(req.body),
+    req.params.id,
+    new Blog(req.body),
     (err, data) => {
       if (err) {
         if (err.kind === "non trouvé") {
           res.status(404).send({
-            message: `Non trouvé avec id ${req.params.blogId}.`
+            message: `Non trouvé avec id selectionné ${req.params.id}.`
           });
         } else {
           res.status(500).send({
-            message: "Erreur " + req.params.blogId
+            message: "Erreur " + req.params.id
           });
         }
       } else res.send(data);
@@ -66,7 +69,7 @@ exports.createBlog = (req, res) => {
 
     // Create a Customer
   const blog = new Blog({
-    //blog_id = req.body.blog_id;
+    //blog_id = req.body.blog_id,
     bloguser_id : req.body.bloguser_id,
     blog_titre : req.body.titre,
     blog_text : req.body.text,
@@ -91,15 +94,15 @@ exports.createBlog = (req, res) => {
 };
 
 exports.delete = (req, res) => {
-  Blog.remove (req.params.blogId, (err, data) => {
+  Blog.remove (req.params.id, (err, data) => {
     if (err) {
       if (err.kind === "non trouvé") {
         res.status(404).send({
-          message: `Non trouvé avec id ${req.params.blogId}.`
+          message: `Non trouvé avec id ${req.params.id}.`
         });
       } else {
         res.status(500).send({
-          message: "impossible de supprimer " + req.params.blogId
+          message: "impossible de supprimer " + req.params.id
         });
       }
     } else res.send({ message: `Blog was deleted successfully!` });
@@ -107,16 +110,20 @@ exports.delete = (req, res) => {
 };
 
 exports.deleteAll = (req, res) => {
-  Customer.removeAll((err, data) => {
+  Blog.removeAll((err, data) => {
     if (err)
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all customers."
+          err.message || "Some error occurred while removing all blogs."
       });
-    else res.send({ message: `All Customers were deleted successfully!` });
+    else res.send({ message: `All blogs were deleted successfully!` });
   });
 };
 
+
+
+
+/*
 exports.deleteBlog = function (req, res) {
   let blog_id = req.body.blog_id;
   if (!blog_id) {
@@ -128,7 +135,7 @@ exports.deleteBlog = function (req, res) {
   });
 }
 
-
+*/
 
 
 

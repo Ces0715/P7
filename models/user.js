@@ -13,35 +13,20 @@ const jwt = require("jsonwebtoken");
     this.user_mail = user.user_mail;
     this.user_mp = user.user_mp;
   };
-
-  module.exports = User;
-/*
-  User.getAll = function (result) {
-    db.query("SELECT * FROM users", (err,res)=> {
-        if (err) {
-          console.log("erreur:", err);
-          result(null,err);
-          return;
-        }  
-        console.log("users:",res);
-        result(null,res);
-      });
-  };
-
   
 //fonction pour créer un nouveau compte
-  User.signup = (newUser, result) => {
-    // mettre info dans la table users
-    db.query("INSERT INTO users SET ?", newUser, (err, res) => {
-      if (err) {
-        console.log("erreur:", err);
-        result(err, null);
-        return;
-      }
-      console.log("user créé: ", { id: res.insertId, ...newUser });
-      result(null, { id: res.insertId, ...newUser });
-    });
-  };
+User.signup = (newUser, result) => {
+  // mettre info dans la table users
+  db.query("INSERT INTO users SET ?", newUser, (err, res) => {
+    if (err) {
+      console.log("erreur:", err);
+      result(err, null);
+      return;
+    }
+    console.log("user créé: ", { id: res.insertId, ...newUser });
+    result(null, { id: res.insertId, ...newUser });
+  });
+};
 
   //fonction pour créer login du compte
   User.login = (user_mail, user_mp, result) => {
@@ -73,10 +58,27 @@ const jwt = require("jsonwebtoken");
     }
 });
 
+  User.getAll = function (result) {
+    db.query("SELECT * FROM users", (err,res)=> {
+        if (err) {
+          console.log("erreur:", err);
+          result(null,err);
+          return;
+        }  
+        console.log("users:",res);
+        result(null,res);
+      });
+  };
+
+  module.exports = User; 
+ 
+
   //fonction pour recuperer un user
   User.findById = (userId, result) => {
     //retrieves infos for the user whse id is provided
-    db.query(`SELECT * FROM users WHERE  user_id = ${userId}`, (err, res) => {
+   // db.query(`SELECT * FROM users WHERE  user_id = ${userId}`,
+    db.query(`SELECT  user_nom, user_nom, user_login, user_mail, user_mp FROM users WHERE user_id = ${userId}`,  
+    (err, res) => {
         if (err) {
             console.log("erreur: ", err);
             result(err, null);
@@ -93,10 +95,6 @@ const jwt = require("jsonwebtoken");
     }; 
        
 };
-module.exports = User;
-
- 
-
 
 /*
   User.updateById = (id, user, result) => {
@@ -148,4 +146,4 @@ module.exports = User;
   };
 
 */
-
+;
