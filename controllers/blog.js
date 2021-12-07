@@ -19,7 +19,7 @@ exports.getAllBlog = function (_req, res,next) {
 exports.findOneBlog = (req, res) => {
   Blog.findById(req.params.id, (err, data) => {
     if (err) {
-      if (err.kind === "non trouvé") {c
+      if (err.kind === "non trouvé") {
         res.status(404).send({
           message: `Non trouvé avec id ${req.params.id}.`
         });
@@ -70,7 +70,7 @@ exports.createBlog = (req, res) => {
     // Create a Customer
   const blog = new Blog({
     //blog_id = req.body.blog_id,
-    bloguser_id : req.body.bloguser_id,
+    user_id : req.body.bloguser_id,
     blog_titre : req.body.titre,
     blog_text : req.body.text,
     blog_date : req.body.date,

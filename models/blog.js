@@ -4,9 +4,8 @@ require("dotenv").config();
 
 //constructeur du modele Blog
   const Blog = function(blog) {
-    //this.blog_id = blog.blog_id;
     this.blog_id = blog.blog_id;
-    this.bloguser_id = blog.bloguser_id;
+    this.bloguser_id = blog.user_id;
     this.blog_titre = blog.blog_titre;
     this.blog_text = blog.blog_text;
     this.blog_date = blog.blog_date;
@@ -57,10 +56,9 @@ Blog.findById = (BlogId, result) => {
       });
   };
 
-
   //fonction pour modifier un blog
   Blog.updateById = (id, blog, result) => {
-    db.query("UPDATE blogs SET blog_titre = ?, blog_text = ?, blog_date = ?, blog_image = ? WHERE id = ?",
+    db.query("UPDATE blogs SET blog_titre = ?, blog_text = ?, blog_date = ?, blog_image = ? WHERE blog_id = ?",
       [blog.blog_titre, blog.blog_text, blog.blog_date, blog.blog_image, id],
       (err, res) => {
         if (err) {
@@ -77,7 +75,6 @@ Blog.findById = (BlogId, result) => {
         result(null, { id: id, ...blog });
       });
   };
-
 
   //fonction pour supprimer un blog
   Blog.remove = (id, result) => {
@@ -96,7 +93,6 @@ Blog.findById = (BlogId, result) => {
       result(null, res);
     });
   };
-
 
   //fonction pour tout supprimer
   Blog.removeAll = result => {

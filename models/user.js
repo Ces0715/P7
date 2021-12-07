@@ -46,7 +46,7 @@ User.signup = (newUser, result) => {
                 result(null, {
                     userId: res[0].user_id,
                     mail: res[0].user_mail,
-                    token: jwt.sign({ userId: res[0].user_id }, "RANDOM_TOKEN_SECRET", { expiresIn: "24h" }),
+                    token: jwt.sign({ userId: res[0].user_id }, process.env.SECRET_TOKEN, { expiresIn: "24h" }),
                 });
             }
         });
@@ -70,31 +70,36 @@ User.signup = (newUser, result) => {
       });
   };
 
-  module.exports = User; 
- 
-
   //fonction pour recuperer un user
   User.findById = (userId, result) => {
     //retrieves infos for the user whse id is provided
    // db.query(`SELECT * FROM users WHERE  user_id = ${userId}`,
-    db.query(`SELECT  user_nom, user_nom, user_login, user_mail, user_mp FROM users WHERE user_id = ${userId}`,  
+    db.query(`SELECT user_id, user_nom, user_prenom, user_login, user_mail, user_mp FROM users WHERE user_id = ${userId}`,  
     (err, res) => {
         if (err) {
             console.log("erreur: ", err);
             result(err, null);
             return;
         } 
-        if (res.length) {
+        else if (res.length) {
           console.log("user ok: ", res[0]);
           result(null, res[0]);
           return;
-        }
+      }
         // not found User with the id
         result({ kind: "non trouvé" }, null);
       });
-    }; 
-       
+    };      
 };
+
+module.exports = User; 
+
+
+
+
+
+
+
 
 /*
   User.updateById = (id, user, result) => {

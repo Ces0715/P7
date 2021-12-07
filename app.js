@@ -21,21 +21,18 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 const blogRoutes = require('./routes/blog');
 app.use('/api/blogs', blogRoutes);
-
 const userRoutes = require('./routes/user');
 app.use('/api/users', userRoutes);
 
 module.exports = app;
 
 
-/*
-app.get('/users', function (_req, res) {
-  db.query('SELECT * FROM users', function (error, results, _fields) {
-      if (error) throw error;
-      return res.send({ data: results, message: 'user list.' });
-  });
-});
 
+
+
+
+
+/*
 // Recuperation user avec id 
 app.get('/users/:id', function (req, res) {
   let user_id = req.params.id;
@@ -85,16 +82,6 @@ app.put('/users', function (req, res) {
   });
   }); 
 
-
-
-
-
-
-
-
-
-
-/*
 // Ajout nouveau blog 
 app.post('/blogs', function (req, res) {
   let blog = req.body.blog;
@@ -132,36 +119,6 @@ app.put('/blogs', function (req, res) {
   });
   }); 
  
-//Recuperation tous les blogs
-app.get('/blogs', function (_req, res) {
-  db.query('SELECT * FROM blogs', function (error, results, _fields) {
-      if (error) throw error;
-      return res.send({ data: results, message: 'blog list.' });
-  });
-});
 
-// Recuperation blog avec id 
-app.get('/blogs/:id', function (req, res) {
-  let blog_id = req.params.blog_id;
-  if (!blog_id) {
-   return res.status(400).send({ error: true, message: ' blog_id non recupéré' });
-  }
-  db.query('SELECT * FROM blogs where id=?', blog_id, function (error, results, fields) {
-   if (error) throw error;
-    return res.send({ error: false, data: results[0], message: 'blogs list.' });
-  });
-});
-
-
-db.query('SELECT * FROM blogs', (err, rows) => {
-  if (err) throw err;
-  console.log('Données récupérées');
-  console.log(rows);
-});
-db.query('SELECT * FROM users', (err, rows) => {
-  if (err) throw err;
-  console.log('Users récupérés');
-  console.log(rows);
-});
 */
 
