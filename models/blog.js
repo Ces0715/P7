@@ -57,9 +57,9 @@ Blog.findById = (BlogId, result) => {
   };
 
   //fonction pour modifier un blog
-  Blog.updateById = (id, blog, result) => {
+  Blog.updateById = (BlogId, blog, result) => {
     db.query("UPDATE blogs SET blog_titre = ?, blog_text = ?, blog_date = ?, blog_image = ? WHERE blog_id = ?",
-      [blog.blog_titre, blog.blog_text, blog.blog_date, blog.blog_image, id],
+      [blog.blog_titre, blog.blog_text, blog.blog_date, blog.blog_image, BlogId],
       (err, res) => {
         if (err) {
           console.log("erreur: ", err);
@@ -71,8 +71,8 @@ Blog.findById = (BlogId, result) => {
           result({ kind: "non trouvé" }, null);
           return;
         }
-        console.log("blog modifié: ", { id: id, ...blog });
-        result(null, { id: id, ...blog });
+        console.log("blog modifié: ", { BlogId: BlogId, ...blog });
+        result(null, {BlogId: BlogId, ...blog });
       });
   };
 
