@@ -15,7 +15,7 @@ const jwt = require("jsonwebtoken");
   };
   
 //fonction pour créer un nouveau compte
-User.signup = (newUser, result) => {
+User.create = (newUser, result) => {
   // mettre info dans la table users
   db.query("INSERT INTO users SET ?", newUser, (err, res) => {
     if (err) {
@@ -23,9 +23,10 @@ User.signup = (newUser, result) => {
       result(err, null);
       return;
     }
-    console.log("user créé: ", { id: res.insertId, ...newUser });
-    result(null, { id: res.insertId, ...newUser });
-  });
+    console.log('créé');
+            result(null, {id: res.id, ...newUser});
+        }
+    );
 };
 
   //fonction pour créer login du compte
@@ -58,23 +59,12 @@ User.signup = (newUser, result) => {
     }
 });
 
-  User.getAll = function (result) {
-    db.query("SELECT * FROM users", (err,res)=> {
-        if (err) {
-          console.log("erreur:", err);
-          result(null,err);
-          return;
-        }  
-        console.log("users:",res);
-        result(null,res);
-      });
-  };
 
   //fonction pour recuperer un user
   User.findById = (userId, result) => {
     //retrieves infos for the user whse id is provided
-   // db.query(`SELECT * FROM users WHERE  user_id = ${userId}`,
-    db.query(`SELECT user_id, user_nom, user_prenom, user_login, user_mail, user_mp FROM users WHERE user_id = ${userId}`,  
+    db.query(`SELECT * FROM users WHERE  user_id = ${userId}`,
+    //db.query(`SELECT user_id, user_nom, user_prenom, user_login, user_mail, user_mp FROM users WHERE user_id = ${userId}`,  
     (err, res) => {
         if (err) {
             console.log("erreur: ", err);
@@ -150,5 +140,22 @@ module.exports = User;
     });
   };
 
+*/
+
+
+
+
+/*
+  User.getAll = function (result) {
+    db.query("SELECT * FROM users", (err,res)=> {
+        if (err) {
+          console.log("erreur:", err);
+          result(null,err);
+          return;
+        }  
+        console.log("users:",res);
+        result(null,res);
+      });
+  };
 */
 ;
