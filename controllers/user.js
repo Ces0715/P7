@@ -7,6 +7,9 @@ const validator = require("email-validator");
 require("dotenv").config();
 const db = require("../middleware/dbconnect");
 
+//const passwordValidator = require("password-validator");
+const maskData = require("maskdata");
+
 exports.getAllUser = function (_req, res) {
   db.query('SELECT * FROM users', function (error, results, _fields) {
     if (error) throw error;
@@ -54,8 +57,7 @@ exports.signUp = function (req, res) {
             user_mail: req.body.user_mail,
             user_mp: hash,
           });
-
-          //conserver dans db
+        //conserver dans db
           User.create(user, (err, data) => {
             if (err)
               res.status(500).send({
@@ -68,31 +70,56 @@ exports.signUp = function (req, res) {
   }
 };
 
-
-
-
-
-
-
-
 //function to conenct to account
 exports.login = function (req, res) {
-  const email = maskData.maskEmail2(req.body.email);
-  const password = req.body.password;
+  const email = maskData.maskEmail2(req.body.user_mail);
+  const password = req.body.user_mp;
 
-  //if email and password are filled-in
+  //si mail et mp enregistré
   if (email && password) {
       User.login(email, password, (err, data) => {
           if (err)
               res.status(500).send({
-                  message: err.message || "Something went wrong when logging into account !",
+                  message: err.message || "probleme avec login !",
               });
           else res.send(data);
       });
   } else {
-      //if the form isn't filled-in, throw error
-      res.status(500).json({ message: "You must fill-in the form" });
+      //if loggin incorrect
+      res.status(500).json({ message: "enregister correctement" });
   }
+};
+
+//recuperer un user
+exports.findOneUser = function (req, res) {
+    const token = req.headers.authorization.split('')[1]; //extracting token from authorization header
+    const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN); //decoding token with the key indicated at controllers/user.controller.js:53
+    const userId = decodedToken.userId; //defining decoded token as user id
+
+    User.findById(userId, (err, data) => {
+        if (err) {
+            res.status(500).send({
+                message: "Error retrieving user with this id : " + userId,
+            });
+        } else res.send(data);
+    });
+};
+
+
+
+/*
+exports.findOneUser = (userId, result) => {
+  db.query(`SELECT * FROM users WHERE user_id = ${userId}`, (err, res) => {
+    if (err) {
+      console.log("erreur: ", err);
+      result(err, null);
+      return;
+
+    } else if (res.length) {
+      result(null, res[0]);
+      return;
+    }
+  });
 };
 
 exports.findOneUser = (req, res) => {
@@ -110,50 +137,5 @@ exports.findOneUser = (req, res) => {
     } else res.send(data);
   });
 };
-
-  //Fonction qui gère la logique métier de la route POST (connexion d'un user existant dans la database)
-  exports.login = (req, res, _next) => {
-    //Recherche de l'utilisateur dans la DB via son email
-    let sql1 = `SELECT * FROM users WHERE user_mail = ?`;
-    db.query(sql1, [req.body.user_mail], function (err, data, fields) {
-      if (data.length === 0) {
-        return res.status(404).json({ err: "Utilisateur non trouvé !" });
-      }
-      //Si on a trouvé le mail dans la DB, on compare le hash du nouveau mot de passe au hash de la DB
-      bcrypt.compare(req.body.user_mp, data[0].user_mp)
-        .then(valid => {
-          if (!valid) {
-            return res.status(401).json({ error: "Mot de passe incorrect !" });
-          }
-          res.status(200).json({
-            userId: data[0].user_id,
-            user_nom: data[0].user_nom,
-
-            //Si le password est correct, encodage d'un nouveau token
-            token: jwt.sign(
-              { userId: data[0].user_id, user_nom: data[0].user_nom, },
-              process.env.SECRET_TOKEN,
-              { expiresIn: "24h" }
-            )
-          });
-        })
-        .catch(error => res.status(500).json({ error }));
-    });
-  };
-
-
-/*
-exports.findOneUser = (userId, result) => {
-  db.query(`SELECT * FROM users WHERE user_id = ${userId}`, (err, res) => {
-    if (err) {
-      console.log("erreur: ", err);
-      result(err, null);
-      return;
-
-    } else if (res.length) {
-      result(null, res[0]);
-      return;
-    }
-  });
-};
+ 
 */

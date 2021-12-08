@@ -63,8 +63,8 @@ User.create = (newUser, result) => {
   //fonction pour recuperer un user
   User.findById = (userId, result) => {
     //retrieves infos for the user whse id is provided
-    db.query(`SELECT * FROM users WHERE  user_id = ${userId}`,
-    //db.query(`SELECT user_id, user_nom, user_prenom, user_login, user_mail, user_mp FROM users WHERE user_id = ${userId}`,  
+    //db.query(`SELECT * FROM users WHERE  user_id = ${userId}`,
+    db.query(`SELECT user_id, user_nom, user_prenom, user_login, user_mail, user_mp FROM users WHERE user_id = ${userId}`,  
     (err, res) => {
         if (err) {
             console.log("erreur: ", err);
@@ -81,6 +81,22 @@ User.create = (newUser, result) => {
       });
     };      
 };
+
+//this is for deleting the account of a user
+User.delete = (userId, result) => {
+  //deleting the account of the user whose id is provided
+  db.query(`DELETE FROM users WHERE user_id = ${userId}`, (err, res) => {
+      if (err) {
+          console.log("error :", err);
+          result(err, null);
+          return;
+      } else {
+          result(null, res[0]);
+          return;
+      }
+  });
+};
+
 
 module.exports = User; 
 
