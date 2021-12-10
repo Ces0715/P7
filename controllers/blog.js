@@ -38,8 +38,6 @@ exports.updateBlog = (req, res) => {
       message: "modifier!"
     });
   }
-console.log(req.body);
-
   Blog.updateById (
     req.params.id,
     new Blog(req.body),
@@ -123,19 +121,7 @@ exports.deleteAll = (req, res) => {
 
 
 
-/*
-exports.deleteBlog = function (req, res) {
-  let blog_id = req.body.blog_id;
-  if (!blog_id) {
-    return res.status(400).send({ error: true, message: 'Supprimer blog_id' });
-  }
-  db.query('DELETE FROM blogs WHERE blog_id = ?', [blog_id], function (error, results, fields) {
-    if (error) throw error;
-    return res.send({ error: false, data: results, message: 'blog supprimé.' });
-  });
-}
 
-*/
 
 
 

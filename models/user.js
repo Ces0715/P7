@@ -23,7 +23,7 @@ User.create = (newUser, result) => {
       result(err, null);
       return;
     }
-    console.log('créé');
+    console.log('user créé');
             result(null, {id: res.id, ...newUser});
         }
     );
@@ -32,21 +32,26 @@ User.create = (newUser, result) => {
   //fonction pour créer login du compte
   User.login = (user_mail, user_mp, result) => {
     // recuperer infos du user qui a un mail
-    db.query(`SELECT * FROM users WHERE user_mail = ?`,user_mail, (err, res) => {
+    db.query(`SELECT * FROM users WHERE user_mail = ?`,user_mail, 
+    (err, res) => {
        //si email dans bd
        if (res.length > 0) {
+         console.log(1);
         //comparer le mp avec celui de la bd
         bcrypt.compare(user_mp, res[0].user_mp).then((valid) => {
             // si pas de correspondance erreur
             if (!valid) {
-                console.log("error :", err);
+                console.log("errror :", err);
+                console.log(2);
                 result(err, null);
                 return;
             } else {
+              console.log(3);
                 //si ok envoie des infos et creation token
                 result(null, {
                     userId: res[0].user_id,
                     mail: res[0].user_mail,
+                    mp:res[0].user_mp,
                     token: jwt.sign({ userId: res[0].user_id }, process.env.SECRET_TOKEN, { expiresIn: "24h" }),
                 });
             }
@@ -54,15 +59,14 @@ User.create = (newUser, result) => {
     } else {
         // si pas de correspondance renvoie une erreur
         console.log("error :", err);
+        console.log(4);
         result(err, null);
         return;
     }
 });
 
-
   //fonction pour recuperer un user
   User.findById = (userId, result) => {
-    //retrieves infos for the user whse id is provided
     //db.query(`SELECT * FROM users WHERE  user_id = ${userId}`,
     db.query(`SELECT user_id, user_nom, user_prenom, user_login, user_mail, user_mp FROM users WHERE user_id = ${userId}`,  
     (err, res) => {
@@ -96,7 +100,6 @@ User.delete = (userId, result) => {
       }
   });
 };
-
 
 module.exports = User; 
 
