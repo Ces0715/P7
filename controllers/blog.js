@@ -69,6 +69,7 @@ exports.createBlog = (req, res) => {
   const blog = new Blog({
     //blog_id = req.body.blog_id,
     user_id : req.body.bloguser_id,
+    userId: req.body.user_id,
     blog_titre : req.body.titre,
     blog_text : req.body.text,
     blog_date : req.body.date,

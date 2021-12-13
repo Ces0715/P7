@@ -7,9 +7,7 @@ const validator = require("email-validator");
 require("dotenv").config();
 const db = require("../middleware/dbconnect");
 //const passwordValidator = require("password-validator");
-const maskData = require("maskdata");
 const auth = require('../middleware/auth');
-
 
 exports.getAllUser = function (_req, res) {
   db.query('SELECT * FROM users', function (error, results, _fields) {
@@ -71,7 +69,7 @@ exports.signUp = function (req, res) {
   }
 };
 
-//function to conenct to account
+//function to conect to account
 exports.login = function (req, res) {
   const email = req.body.user_mail;
   const password = req.body.user_mp;
@@ -93,39 +91,6 @@ exports.login = function (req, res) {
   }
 };
 
-
-/*
-//recuperer un user
-exports.findOneUser = function (req, res) {
-  const token = req.headers.authorization.split(' ')[1]; //extracting token from authorization header
-  const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN); //decoding token with the key indicated at controllers/user.controller.js:53
-   const userId = decodedToken.userId; //defining decoded token as user id
-
-    User.findById(userId, (err, data) => {
-        if (err) {
-            res.status(500).send({
-                message: "Error retrieving user with this id : " + userId,
-            });
-        } else res.send(data);
-    });
-};
-*/
-exports.findOneUser = (req, res) => {
-  User.findOneUser(req.params.id, (err, data) => {
-    if (err) {
-      if (err.kind === "non trouvé") {
-        res.status(404).send({
-          message: `Non trouvé avec id ${req.params.id}.`
-        });
-      } else {
-        res.status(500).send({
-          message: "Erreur " + req.params.id
-        });
-      }
-    } else res.send(data);
-  });
-};
-
 //supprimer un user
 exports.deleteUser = (req, res) => {
   User.delete (req.params.id, (err, data) => {
@@ -144,24 +109,35 @@ exports.deleteUser = (req, res) => {
 };
 
 
+//recuperer un user
+exports.findOneUser = function (req, res) {
+  const token = req.headers.authorization.split(' ')[1]; //extracting token from authorization header
+  const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN); //decoding token with the key indicated at controllers/user.controller.js:53
+   const userId = decodedToken.userId; //defining decoded token as user id
 
-
-
-
-
-exports.findOneUser = (userId, result) => {
-  db.query(`SELECT * FROM users WHERE user_id = ${userId}`, (err, res) => {
+    User.findById(userId, (err, data) => {
+        if (err) {
+            res.status(500).send({
+                message: "Error retrieving user with this id : " + userId,
+            });
+        } else res.send(data);
+    });
+};
+/*
+exports.findOneUser = (req, res) => {
+  User.findById(req.params.id, (err, data) => {
     if (err) {
-      console.log("erreur: ", err);
-      result(err, null);
-      return;
-
-    } else if (res.length) {
-      result(null, res[0]);
-      return;
-    }
+      if (err.kind === "non trouvé") {
+        res.status(404).send({
+          message: `Non trouvé avec id ${req.params.id}.`
+        });
+      } else {
+        res.status(500).send({
+          message: "Erreur " + req.params.id
+        });
+      }
+    } else res.send(data);
   });
 };
 
-
- 
+ */

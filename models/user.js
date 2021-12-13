@@ -67,8 +67,8 @@ User.create = (newUser, result) => {
 
   //fonction pour recuperer un user
   User.findById = (userId, result) => {
-    //db.query(`SELECT * FROM users WHERE  user_id = ${userId}`,
-    db.query(`SELECT user_id, user_nom, user_prenom, user_login, user_mail, user_mp FROM users WHERE user_id = ${userId}`,  
+    db.query(`SELECT * FROM users WHERE  user_id = ${userId}`,
+    //db.query(`SELECT user_id, user_nom, user_prenom, user_login, user_mail, user_mp FROM users WHERE user_id = ${userId}`,  
     (err, res) => {
         if (err) {
             console.log("erreur: ", err);
