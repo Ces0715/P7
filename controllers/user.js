@@ -55,6 +55,7 @@ exports.signUp = function (req, res) {
             user_login: req.body.user_login,
             user_mail: req.body.user_mail,
             user_mp: hash,
+            isAdmin:0,
           });
         //conserver dans db
           User.create(user, (err, data) => {

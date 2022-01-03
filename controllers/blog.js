@@ -38,6 +38,10 @@ exports.updateBlog = (req, res) => {
       message: "modifier!"
     });
   }
+
+// recup id auteur blog et le comparer userId actif
+// si ok alors on update sinon err
+
   Blog.updateById (
     req.params.id,
     new Blog(req.body),
@@ -65,17 +69,18 @@ exports.createBlog = (req, res) => {
     });
   } else {
 
+    
     // Create a Customer
   const blog = new Blog({
     //blog_id = req.body.blog_id,
-    user_id : req.body.bloguser_id,
+    user_id : req.userId,
     userId: req.body.user_id,
     blog_titre : req.body.titre,
     blog_text : req.body.text,
     blog_date : req.body.date,
     blog_image : req.body.image, 
   });
-  console.log(blog);
+  
 
     // Save Customer in the database
   Blog.createBlog(blog, (err, data) => {

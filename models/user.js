@@ -12,6 +12,7 @@ const jwt = require("jsonwebtoken");
     this.user_login = user.user_login;
     this.user_mail = user.user_mail;
     this.user_mp = user.user_mp;
+    this.isAdmin = user.isAdmin;
   };
   
 //fonction pour créer un nouveau compte
